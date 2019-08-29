@@ -1,5 +1,7 @@
 package com.tf414.app.rsseditor.ui;
 
-public class SubscribeMenu {
+import javax.swing.JFrame;
 
+public class SubscribeMenu extends	JFrame{
+	
 }

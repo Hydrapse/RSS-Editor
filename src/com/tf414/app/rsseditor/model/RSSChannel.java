@@ -1,4 +1,4 @@
-package com.tf414.app.rsseditor.data;
+package com.tf414.app.rsseditor.model;
 
 import java.util.ArrayList;
 import java.util.List;
