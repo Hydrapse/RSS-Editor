@@ -38,7 +38,7 @@ public class SubscribeMenu extends JFrame {
 	private void init() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		int[] geo = AutoadaptWindowSize.getMainMenuGeometry();
+		int[] geo = AutoadaptWindowSize.getSubscribeMenuGeometry();
 		setBounds(geo[0], geo[1], geo[2], geo[3]);
 		
 		contentPane = new JPanel();
