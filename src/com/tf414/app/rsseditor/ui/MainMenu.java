@@ -12,6 +12,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -89,8 +90,7 @@ public class MainMenu {
 	public void initMenu() {
 		//-------------菜单栏中按钮以及搜索文本框的初始化---------------------------------
 
-		ImageIcon SubscribeMenuImage = ImageAdaptive.createAutoAdjustIcon("./res/DNA.jpg",true);
-		
+		ImageIcon SubscribeMenuImage = ImageAdaptive.createAutoAdjustIcon("http://pic33.nipic.com/20131007/13639685_123501617185_2.jpg",true);
 		this.SubscribeMenu = new JButton(SubscribeMenuImage);
 		this.SubscribeMenu.setPreferredSize(new Dimension(30,30));//设置按钮大小
 //		this.SubscribeMenu.setContentAreaFilled(false);//设置按钮透明

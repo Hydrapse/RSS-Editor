@@ -6,7 +6,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.swing.ImageIcon;
 public class ImageAdaptive {
@@ -60,8 +66,21 @@ public class ImageAdaptive {
 	     *      {@link javax.swing.JComponent#setAlignmentX(float)}和
 	     *      {@link javax.swing.JComponent#setAlignmentY(float)}方法设置组件对齐方式。
 	     * @date  2019-08-20 */
-	    public static ImageIcon createAutoAdjustIcon(String filename, boolean constrained) {
-	        return createAutoAdjustIcon(new ImageIcon(filename).getImage(), constrained);
+	    public static ImageIcon createAutoAdjustIcon(String imgurl, boolean constrained) {
+	    	if(imgurl.toString().contains("http://") ||imgurl.toString().contains("https://") ) {
+	    		URL url = null;
+	    		try {
+	    			url = new URL(imgurl);
+	    		}
+	    		catch(Exception e) {
+	    				e.toString();
+	    		}
+	    		return createAutoAdjustIcon(url,constrained);
+	    	}
+	    	else {
+	    		return createAutoAdjustIcon(new ImageIcon(imgurl).getImage(), constrained);
+	    	}
+
 	    }
 	    
 	    /**创建一个可以自适应组件大小的ImageIcon对象
@@ -71,7 +90,41 @@ public class ImageAdaptive {
 	     *      {@link javax.swing.JComponent#setAlignmentY(float)}方法设置组件对齐方式。
 	     * @date  2019-08-20 */
 	    public static ImageIcon createAutoAdjustIcon(URL url, boolean constrained) {
-	        return createAutoAdjustIcon(new ImageIcon(url).getImage(), constrained);
+	    	if(url.toString().contains("http://") || url.toString().contains("https://")) {
+		        File file=new File("./photos");
+	            String files[];
+	            files=file.list();
+	            int num = files.length;
+		    	try {
+					URLConnection connection = url.openConnection();
+					InputStream stream = connection.getInputStream();
+					FileOutputStream image = new FileOutputStream("./photos/图片"+num+".jpg");//根本图片编号生成本地地址	
+					byte[] buf = new byte[1024*8];
+		            while(true) {//读取图片字节	            	
+		                int len = stream.read(buf);      
+		                if(len == -1) {
+		                	break;     
+		                }
+		                image.write(buf, 0, len);//存储到本地
+		            }
+		            image.close();
+		            Thread thread =Thread.currentThread();
+		            thread.stop();
+		    	}
+		    	catch (MalformedURLException e) {
+		    		e.printStackTrace();
+	    		} catch (IOException e) {
+	    			e.printStackTrace();
+	    		}
+		    	finally {
+		    			return createAutoAdjustIcon(new ImageIcon("./photos/图片"+num+".jpg").getImage(), constrained);
+		    	}
+	    	}
+	    	else {
+	    		return createAutoAdjustIcon(new ImageIcon(url).getImage(), constrained);
+	    	}
+
 	   }
+ 
 }
 
