@@ -70,7 +70,7 @@ public class REDatabase {
 
 	}
 
-	public void insertLabel(String label) throws SQLException {
+	public void removeLabel(String label) throws SQLException {
 
 	}
 
