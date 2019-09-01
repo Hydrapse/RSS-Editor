@@ -32,37 +32,63 @@ public class REDatabase {
 	}
 
 	private Connection con = null;
-	
+
 	private void executeCreateSQL(String sql) throws SQLException {
 		Statement s = con.createStatement();
 		s.execute(sql);
 	}
+
+	public void insertItem(RSSItem item) throws SQLException {
+
+	}
+
+	public void insertChannel(RSSChannel item) throws SQLException {
+
+	}
+
+	public void insertLabel(RSSLabel item) throws SQLException {
+
+	}
 	
+	public void updateItem(RSSItem item) throws SQLException {
+
+	}
+
+	public void updateChannel(RSSChannel item) throws SQLException {
+
+	}
+
+	public void updateLabel(RSSLabel item) throws SQLException {
+
+	}
+	
+	public void removeItem(int channelID, String name) throws SQLException {
+
+	}
+
+	public void removeChannel(String channel) throws SQLException {
+
+	}
+
+	public void insertLabel(String label) throws SQLException {
+
+	}
+
 	private void createItemTable() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS label\n" + 
-				"(\n" + 
-				"label varchar(20),\n" + 
-				"channelID integer\n" + 
-				");";
+		String sql = "CREATE TABLE IF NOT EXISTS item\n" + "(\n" + "label varchar(20),\n" + "channelID integer\n"
+				+ ");";
 		executeCreateSQL(sql);
 	}
-	
-	private void createChannelTable() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS label\n" + 
-				"(\n" + 
-				"label varchar(20),\n" + 
-				"channelID integer\n" + 
-				");";
-		executeCreateSQL(sql);
-	}
-	
+
 	private void createLabelTable() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS channel\n" + 
-				"(\n" + 
-				"channelID integer,\n" + 
-				"title varchar(20),\n" + 
-				"channelID integer\n" + 
-				");";
+		String sql = "CREATE TABLE IF NOT EXISTS label\n" + "(\n" + "label varchar(20),\n" + "channelID integer\n"
+				+ ");";
+		executeCreateSQL(sql);
+	}
+
+	private void createChannelTable() throws SQLException {
+		String sql = "CREATE TABLE IF NOT EXISTS channel\n" + "(\n" + "channelID integer,\n" + "title varchar(20),\n"
+				+ "description varchar(q)\n" + ");";
 		executeCreateSQL(sql);
 	}
 
@@ -71,7 +97,7 @@ public class REDatabase {
 		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
 		System.out.println("Successfully connected to mysql");
 	}
-	
+
 	@Override
 	public void finalize() {
 		try {
@@ -81,5 +107,5 @@ public class REDatabase {
 			e.printStackTrace();
 		}
 	}
-	
+
 }
