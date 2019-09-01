@@ -40,7 +40,6 @@ public final class HTTPReader {
 	 * @return result
 	 */
 	public static InputStream read(String url) throws IOException{
-		StringBuffer sbuf =new StringBuffer();
 		HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Maxthon;)");
         conn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");

@@ -1,6 +1,5 @@
 package com.tf414.app.rsseditor.kernal;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -14,6 +13,40 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 public final class DOMReader {
+	
+	private void itemRead(Node node) {
+		if(!node.getNodeName().equals("item")) {
+    		return;
+    	}
+		NodeList nl = node.getChildNodes();
+		for(int i=0; i<nl.getLength(); ++i) {
+        	Node n = nl.item(i);
+        	itemRead(n);
+		}
+	}
+	
+	private void channelRead(Node node) {
+		if(!node.getNodeName().equals("channel")) {
+    		return;
+    	}
+		NodeList nl = node.getChildNodes();
+		for(int i=0; i<nl.getLength(); ++i) {
+        	Node n = nl.item(i);
+        	itemRead(n);
+		}
+	}
+	
+	private void rssRead(Node node) {
+		if(!node.getNodeName().equals("rss")) {
+    		return;
+    	}
+		NodeList nl = node.getChildNodes();
+		for(int i=0; i<nl.getLength(); ++i) {
+        	Node n = nl.item(i);
+        	channelRead(n);
+		}
+	}
+	
 	public void read() throws ParserConfigurationException, IOException, SAXException{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -22,9 +55,7 @@ public final class DOMReader {
         NodeList nl = doc.getChildNodes();
         for(int i=0; i<nl.getLength(); ++i) {
         	Node n = nl.item(i);
-        	if(!n.getNodeName().equals("rss")) {
-        		continue;
-        	}
+        	rssRead(n);
         }
 	}
 }
