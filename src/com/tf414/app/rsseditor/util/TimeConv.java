@@ -14,9 +14,8 @@ public final class TimeConv {
 	}
 	
 	public static Date strToDate(String time) {
-		time = time.split(", ")[1];
 		if (time != null && time.trim().length() > 0) {
-            time = time.substring(4,24).replace(" ","/");
+            time = time.substring(5,25).replace(" ","/");
             time = time.replace("Jan","01");
             time = time.replace("Feb","02");
             time = time.replace("Mar","03");
@@ -29,7 +28,7 @@ public final class TimeConv {
             time = time.replace("Oct","10");
             time = time.replace("Nov","11");
             time = time.replace("Dec","12");
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss GMT");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy/HH:mm:ss");
             Date date;
 			try {
 				date = sdf.parse(time);
