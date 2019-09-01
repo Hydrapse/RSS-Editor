@@ -74,7 +74,9 @@ public class MainMenu {
 		this.initMenu();
 
 		this.addMenuButtonListener();
+		
 		this.initChannelList();
+		
 		this.setWindowSizeAndLocation();
 		
 		
@@ -97,6 +99,7 @@ public class MainMenu {
 
 		this.channelList.setBounds(0,(int)(lengthConfig[2]*0.26),lengthConfig[2],this.topWindow.getHeight()-(int)(lengthConfig[2]*0.26));
 
+		this.channelTree.setBounds(0, 0, lengthConfig[2],this.topWindow.getHeight()-(int)(lengthConfig[2]*0.26));
 		this.topWindow.add(menu);
 		this.topWindow.add(channelList);
 		
@@ -156,7 +159,7 @@ public class MainMenu {
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
 		for(int i=0 ; i<channels.size();++i) {
 			 DefaultMutableTreeNode chiNode = new DefaultMutableTreeNode(channels.get(i).getName());
-			 for(int j=0 ; j<5 ; ++j) {
+			 for(int j=0 ; j<30 ; ++j) {
 				 DefaultMutableTreeNode chiNode1 =  new DefaultMutableTreeNode("j="+j);
 				 chiNode.add(chiNode1);
 			 }
@@ -164,13 +167,13 @@ public class MainMenu {
 		}
 		
 		channelTree = new Tree(rootNode);
-		channelTree.setSize(new Dimension(200,300));
+//		channelTree.setPreferredSize(new Dimension(channelList.getWidth(),channelList.getHeight()));
 		channelTree.setBackground(Color.yellow);
 		channelTree.setRootVisible(false);
-
+		
 		this.channelList.add(channelTree);
 		this.channelList.setLayout(null);
-		this.channelList.setBackground(Color.white);
+		this.channelList.setBackground(Color.green);
 		this.channelList.setVisible(true);
 		this.topWindow.add(channelList);
 	}
