@@ -21,10 +21,10 @@ import com.tf414.app.rsseditor.data.RSSItem;
 import com.tf414.app.rsseditor.util.TimeConv;
 
 public final class DOMReader {
-	public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
-		DOMReader test = new DOMReader();
-		test.read();
-	}
+//	public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+//		DOMReader test = new DOMReader();
+//		test.read();
+//	}
 	
 	
 	private static void itemRead(Node node,RSSChannel channel) {
@@ -60,7 +60,7 @@ public final class DOMReader {
 		}
 		RSSItem item = new RSSItem(title, description, dateCreated, author, pchannel, link);
 //		System.out.println(item.getTitle());
-		item.printAll();
+//		item.printAll();
 		channel.addItem(item);
 	}
 	
@@ -106,10 +106,10 @@ public final class DOMReader {
 		}
 	}
 	
-	public static void read() throws ParserConfigurationException, IOException, SAXException{
+	public static void read(String url) throws ParserConfigurationException, IOException, SAXException{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        InputStream is = HTTPReader.read("https://rsshub.app/005tv/zx/latest");
+        InputStream is = HTTPReader.read(url);
         Document doc = builder.parse(is);
         NodeList nl = doc.getChildNodes();
         for(int i=0; i<nl.getLength(); ++i) {
