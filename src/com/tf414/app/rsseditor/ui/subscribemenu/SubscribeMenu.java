@@ -133,8 +133,8 @@ public class SubscribeMenu extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(channelList);
 		rightPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		RSSChannel test1 = new RSSChannel(1, "百度", "www.baidu.com", "logoPath/example.jpg");
-		RSSChannel test2 = new RSSChannel(2, "百度2", "www.baidu.com", "logoPath/example.jpg"); 
+		RSSChannel test1 = new RSSChannel("百度", "www.baidu.com", "logoPath/example.jpg");
+		RSSChannel test2 = new RSSChannel("百度2", "www.baidu.com", "logoPath/example.jpg"); 
 
 		chlistModel.addElement(test1);
 		chlistModel.addElement(test2);
