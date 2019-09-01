@@ -4,32 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RSSChannel {
-	private long uID;
 	private String name;
 	private String url;
 	private String logoPath;
 	private List<RSSItem> items;
 	
 	
-	public RSSChannel(long uID, String name) {
+	public RSSChannel(String name) {
 		super();
-		this.uID = uID;
 		this.name = name;
 		items = new ArrayList<RSSItem>();
 	}
 
-	public RSSChannel(long uID, String name, String url, String logoPath) {
+	public RSSChannel(String name, String url, String logoPath) {
 		super();
-		this.uID = uID;
 		this.name = name;
 		this.url = url;
 		this.logoPath = logoPath;
 		items = new ArrayList<RSSItem>();
 	}
 	
-	public RSSChannel(long uID, String name, String url, String logoPath, List<RSSItem> items) {
+	public RSSChannel(String name, String url, String logoPath, List<RSSItem> items) {
 		super();
-		this.uID = uID;
 		this.name = name;
 		this.url = url;
 		this.logoPath = logoPath;
@@ -41,7 +37,6 @@ public class RSSChannel {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + (int) (uID ^ (uID >>> 32));
 		return result;
 	}
 
@@ -59,13 +54,7 @@ public class RSSChannel {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (uID != other.uID)
-			return false;
 		return true;
-	}
-
-	public long getuID() {
-		return uID;
 	}
 	
 	public String getName() {

@@ -3,7 +3,6 @@ package com.tf414.app.rsseditor.data;
 import java.util.Date;
 
 public class RSSItem {
-	private long uID;
 	private String title;
 	private String description;
 	private Date dateCreated;
@@ -14,14 +13,12 @@ public class RSSItem {
 	
 	public RSSItem(long uID, String title) {
 		super();
-		this.uID = uID;
 		this.title = title;
 	}
 
 	public RSSItem(long uID, String title, String description, Date dateCreated, String author, RSSChannel channel,
 			String link) {
 		super();
-		this.uID = uID;
 		this.title = title;
 		this.description = description;
 		this.dateCreated = dateCreated;
@@ -35,7 +32,6 @@ public class RSSItem {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		result = prime * result + (int) (uID ^ (uID >>> 32));
 		return result;
 	}
 
@@ -53,13 +49,7 @@ public class RSSItem {
 				return false;
 		} else if (!title.equals(other.title))
 			return false;
-		if (uID != other.uID)
-			return false;
 		return true;
-	}
-
-	public long getuID() {
-		return uID;
 	}
 	
 	public String getTitle() {
