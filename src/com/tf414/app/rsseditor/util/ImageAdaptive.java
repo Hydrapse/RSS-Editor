@@ -16,6 +16,8 @@ import java.net.URLConnection;
 
 import javax.swing.ImageIcon;
 public class ImageAdaptive {
+		
+		static ImageIcon icon = null;
 	    /**创建一个可以自适应组件大小的ImageIcon对象
 	     * @param image 从<code> Image </code>对象来创建ImageIcon
 	     * @param constrained 是否等比例缩放 。当为<code> true </code>时，可通过
@@ -23,7 +25,7 @@ public class ImageAdaptive {
 	     *      {@link javax.swing.JComponent#setAlignmentY(float)}方法设置组件对齐方式。
 	     * @date  2019-08-20 */
 	    public static ImageIcon createAutoAdjustIcon(Image image, boolean constrained) {
-	        ImageIcon icon = new ImageIcon(image) {
+	        icon = new ImageIcon(image) {
 	            @Override
 	            public synchronized void paintIcon(java.awt.Component cmp, Graphics g, int x, int y) {
 	                //初始化参数
@@ -125,6 +127,12 @@ public class ImageAdaptive {
 	    	}
 
 	   }
- 
+	    
+	    public static String createAutoAdjustIcon(URL url) {
+	    	synchronized(icon) {
+	    		ImageIcon icon=createAutoAdjustIcon(url,false);
+	    		return icon.getDescription();
+	    	}
+	    }
 }
 

@@ -22,9 +22,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
+import com.tf414.app.rsseditor.util.SearchTextField;
 
 public class MainMenu {
 	
@@ -62,7 +65,7 @@ public class MainMenu {
 		this.setWindowSizeAndLocation();
 		
 		this.channelList.add(new JLabel("hello world"));
-		
+		this.channelList.setBackground(Color.white);
 		this.topWindow.setTitle("RSS");
 		
 //		this.topWindow.setResizable(false);
@@ -90,7 +93,7 @@ public class MainMenu {
 	public void initMenu() {
 		//-------------菜单栏中按钮以及搜索文本框的初始化---------------------------------
 
-		ImageIcon SubscribeMenuImage = ImageAdaptive.createAutoAdjustIcon("http://pic33.nipic.com/20131007/13639685_123501617185_2.jpg",true);
+		ImageIcon SubscribeMenuImage = ImageAdaptive.createAutoAdjustIcon("./photos/图片7.jpg",false);
 		this.SubscribeMenu = new JButton(SubscribeMenuImage);
 		this.SubscribeMenu.setPreferredSize(new Dimension(30,30));//设置按钮大小
 //		this.SubscribeMenu.setContentAreaFilled(false);//设置按钮透明
@@ -107,19 +110,20 @@ public class MainMenu {
 		ImageIcon searchImage = new ImageIcon(/*图片路径*/);
 		this.search = new JButton(searchImage);
 		this.search.setPreferredSize(new Dimension(30,30));//设置按钮大小
+//		this.search.setVisible(false);
 //		this.search.setContentAreaFilled(false);//设置按钮透明
 //		this.search.setBorderPainted(false);//设置按钮边框
 		
-		ImageIcon expendOrShrinkImage = new ImageIcon(/*图片路径*/);
+		ImageIcon expendOrShrinkImage = new ImageIcon(/**/);
 		this.expendOrShrink = new JButton(expendOrShrinkImage);
 		this.expendOrShrink.setPreferredSize(new Dimension(30,30));//设置按钮大小
 //		this.expendOrShrink.setContentAreaFilled(false);//设置按钮透明
 //		this.expendOrShrink.setBorderPainted(false);//设置按钮边框
 		
 		
-		this.searchTextField=new JTextField(30);
+		this.searchTextField=new JTextField();
+		this.searchTextField.setPreferredSize(new Dimension(100,30));
 		this.searchTextField.setFont(new Font("楷体",Font.BOLD,16));   //设置文本字体及字数限制
-		this.searchTextField.setText("hello,world");
 		this.searchTextField.setVisible(false);
 		
 		this.menu.add(SubscribeMenu);
@@ -133,6 +137,10 @@ public class MainMenu {
 	
 	}
 	
+	public void initChannelList() {
+		this.channelList = new JPanel();
+//		MutableTreeNode root = new DefaultMutableTreeNode("百度");
+	}
 	
 	public void addMenuButtonListener() {
 		
@@ -162,12 +170,12 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent e)
 			{
 			 	if(searchTextField.isVisible()) {
+
 					searchTextField.setVisible(false);
-					searchTextField.repaint();
+
 			 	}
 			 	else {
 					searchTextField.setVisible(true);
-					searchTextField.repaint();
 			 	}
 			}	
 			
