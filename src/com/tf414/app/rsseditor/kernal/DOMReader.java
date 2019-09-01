@@ -27,7 +27,7 @@ public final class DOMReader {
 	}
 	
 	
-	private void itemRead(Node node,RSSChannel channel) {
+	private static void itemRead(Node node,RSSChannel channel) {
 		String title = null;
 		String description = null;
 		Date dateCreated = null;
@@ -64,7 +64,7 @@ public final class DOMReader {
 		channel.addItem(item);
 	}
 	
-	private RSSChannel channelRead(Node node) {
+	private static RSSChannel channelRead(Node node) {
 		if(!node.getNodeName().equals("channel")) {
     		return null;
     	}
@@ -95,7 +95,7 @@ public final class DOMReader {
 		return channel;
 	}
 	
-	private void rssRead(Node node) {
+	private static void rssRead(Node node) {
 		if(!node.getNodeName().equals("rss")) {
     		return;
     	}
@@ -106,7 +106,7 @@ public final class DOMReader {
 		}
 	}
 	
-	public void read() throws ParserConfigurationException, IOException, SAXException{
+	public static void read() throws ParserConfigurationException, IOException, SAXException{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         InputStream is = HTTPReader.read("https://rsshub.app/005tv/zx/latest");
