@@ -8,8 +8,8 @@ public final class AutoadaptWindowSize {
 	private static Rectangle rect = GraphicsEnvironment
 			.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 	
-	private final static int STATUS_BAR_HEIGHT = 38; //不同操作系统的状态栏高度,Window下为38, Mac下为22
-	private final static double WIDTH_PROPORTION = 1.1666; //Windows下为1.1666,Mac下为1
+	private final static int STATUS_BAR_HEIGHT = 22; //不同操作系统的状态栏高度,Window下为38, Mac下为22
+	private final static double WIDTH_PROPORTION = 1; //Windows下为1.1666,Mac下为1
 	
 	public static int[] getMainMenuGeometry() {
 		int width = (int)(rect.width * 0.20833 / WIDTH_PROPORTION); 
