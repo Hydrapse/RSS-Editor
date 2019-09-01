@@ -13,8 +13,11 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,12 +25,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
+import com.tf414.app.rsseditor.model.RSSChannel;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
 import com.tf414.app.rsseditor.util.SearchTextField;
+import com.tf414.app.rsseditor.util.Tree;
 
 public class MainMenu {
 	
@@ -47,8 +53,15 @@ public class MainMenu {
 	
 	private JButton expendOrShrink = null; //扩展或收缩
 	
-	JTextField searchTextField = null; //搜索文本框
+	private JTextField searchTextField = null; //搜索文本框
 	
+	private List<RSSChannel> channels = new ArrayList<RSSChannel>() {{
+		add(new RSSChannel(1,"百度"));
+		add(new RSSChannel(2,"bilibili"));
+		add(new RSSChannel(3,"搜狐"));
+	}};
+	
+	private Tree channelTree = null;
 	
 	public MainMenu() 
 	{
@@ -61,14 +74,13 @@ public class MainMenu {
 		this.initMenu();
 
 		this.addMenuButtonListener();
-		
+		this.initChannelList();
 		this.setWindowSizeAndLocation();
 		
-		this.channelList.add(new JLabel("hello world"));
-		this.channelList.setBackground(Color.white);
+		
 		this.topWindow.setTitle("RSS");
 		
-//		this.topWindow.setResizable(false);
+		this.topWindow.setResizable(false);
 		this.topWindow.setVisible(true);
 		this.topWindow.setLocationRelativeTo(null);	
 	}
@@ -139,7 +151,28 @@ public class MainMenu {
 	
 	public void initChannelList() {
 		this.channelList = new JPanel();
-//		MutableTreeNode root = new DefaultMutableTreeNode("百度");
+		this.channelList.setLayout(new BoxLayout(channelList,BoxLayout.Y_AXIS));
+		
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
+		for(int i=0 ; i<channels.size();++i) {
+			 DefaultMutableTreeNode chiNode = new DefaultMutableTreeNode(channels.get(i).getName());
+			 for(int j=0 ; j<5 ; ++j) {
+				 DefaultMutableTreeNode chiNode1 =  new DefaultMutableTreeNode("j="+j);
+				 chiNode.add(chiNode1);
+			 }
+			 rootNode.add(chiNode);
+		}
+		
+		channelTree = new Tree(rootNode);
+		channelTree.setSize(new Dimension(200,300));
+		channelTree.setBackground(Color.yellow);
+		channelTree.setRootVisible(false);
+
+		this.channelList.add(channelTree);
+		this.channelList.setLayout(null);
+		this.channelList.setBackground(Color.white);
+		this.channelList.setVisible(true);
+		this.topWindow.add(channelList);
 	}
 	
 	public void addMenuButtonListener() {
@@ -150,7 +183,7 @@ public class MainMenu {
 		
 		this.search.addActionListener(isShowSearchTextField());
 		
-//		this.expendOrShrink.addActionListener(isShowSearchTextField());
+		this.expendOrShrink.addActionListener(isExpandTree());
 		
 	}
 	
@@ -172,6 +205,7 @@ public class MainMenu {
 			 	if(searchTextField.isVisible()) {
 
 					searchTextField.setVisible(false);
+					menu.updateUI();
 
 			 	}
 			 	else {
@@ -183,6 +217,22 @@ public class MainMenu {
 		return isShow;
 	}
 	
+	private ActionListener isExpandTree() {
+		ActionListener isExpand = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+			 	if(channelTree.isSecondLevelExpand()) {
+			 		channelTree.shrinkTree();
+			 	}
+			 	else {
+			 		channelTree.expandTree();
+			 	}
+			}	
+			
+		};
+		return isExpand;
+	}
 	
 	
 	//-----------------------------------
