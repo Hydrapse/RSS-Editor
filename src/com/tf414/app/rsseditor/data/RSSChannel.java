@@ -3,10 +3,13 @@ package com.tf414.app.rsseditor.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 public class RSSChannel {
 	private String name;
 	private String url;
 	private String logoPath;
+	private String description;
 	private List<RSSItem> items;
 	
 	
@@ -58,10 +61,16 @@ public class RSSChannel {
 	}
 	
 	public String getName() {
+		if (name.isEmpty()||name==null) {
+			return ""; 
+		}
 		return name;
 	}
 	
 	public String getUrl() {
+		if (url.isEmpty()||url==null) {
+			return ""; 
+		}
 		return url;
 	}
 	
@@ -70,11 +79,25 @@ public class RSSChannel {
 	}
 
 	public String getLogoPath() {
+		if (logoPath.isEmpty()||logoPath==null) {
+			return ""; 
+		}
 		return logoPath;
 	}
 	
 	public void setLogoPath(String logoPath) {
 		this.logoPath = logoPath;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		if (description.isEmpty()||description==null) {
+			return ""; 
+		}
+		return description;
 	}
 	
 	public List<RSSItem> getItems() {
@@ -83,5 +106,11 @@ public class RSSChannel {
 	
 	public void addItem(RSSItem item) {
 		items.add(item);
+	}
+	//test
+	public void printAllChannel() {
+		for (RSSItem rssItem : items) {
+			rssItem.printAll();
+		}
 	}
 }

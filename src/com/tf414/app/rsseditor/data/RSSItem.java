@@ -11,12 +11,12 @@ public class RSSItem {
 	private String link;
 	
 	
-	public RSSItem(long uID, String title) {
+	public RSSItem(String title) {
 		super();
 		this.title = title;
 	}
 
-	public RSSItem(long uID, String title, String description, Date dateCreated, String author, RSSChannel channel,
+	public RSSItem(String title, String description, Date dateCreated, String author, RSSChannel channel,
 			String link) {
 		super();
 		this.title = title;
@@ -53,26 +53,46 @@ public class RSSItem {
 	}
 	
 	public String getTitle() {
+		if (title.isEmpty()||title==null) {
+			return ""; 
+		}
 		return title;
 	}
 	
 	public String getDescription() {
+		if (description.isEmpty()||description==null) {
+			return ""; 
+		}
 		return description;
 	}
 	
 	public Date getDateCreated() {
+		if (dateCreated==null) {
+			System.out.println("Date is blank");
+			long defTime = 0;
+			dateCreated.setTime(defTime);
+		}
 		return dateCreated;
 	}
 	
 	public String getAuthor() {
+		if (author.isEmpty()||author==null) {
+			return ""; 
+		}
 		return author;
 	}
 	
 	public RSSChannel getChannel() {
+		if (channel==null) {
+			System.out.println("channel is blank"); 
+		}
 		return channel;
 	}
 	
 	public String getLink() {
+		if (link.isEmpty()||link==null) {
+			return ""; 
+		}
 		return link;
 	}
 	
@@ -96,5 +116,15 @@ public class RSSItem {
 		this.link = link;
 	}
 	
-	
+	//test 
+	public void printAll() {
+		System.out.println("title:"+title+"\ndes:"+description+"\ndate:"+dateCreated.toString()+"\naut:"+author+"\nchannel"+channel.getName()
+		+"\nlink"+link);
+	}
+//	private String title;
+//	private String description;
+//	private Date dateCreated;
+//	private String author;
+//	private RSSChannel channel;
+//	private String link;
 }
