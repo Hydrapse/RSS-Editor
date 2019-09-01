@@ -8,10 +8,7 @@ public final class TimeConv {
 	private TimeConv() {
 		throw new IllegalAccessError("Tools must not have instances.");
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(strToDate("Sun, 01 Sep 2019 08:16:16 GMT"));
-	}
+
 	
 	public static Date strToDate(String time) {
 		if (time != null && time.trim().length() > 0) {

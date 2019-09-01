@@ -1,9 +1,11 @@
-package com.tf414.app.rsseditor.util;
+package com.tf414.app.rsseditor.ui.components;
 
 import java.awt.Graphics;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+
+import com.tf414.app.rsseditor.util.ImageAdaptive;
  
 public class SearchTextField extends JTextField {
     private ImageIcon icon;

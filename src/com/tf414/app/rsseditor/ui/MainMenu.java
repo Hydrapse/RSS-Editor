@@ -25,9 +25,9 @@ import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
+import com.tf414.app.rsseditor.ui.components.SearchTextField;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
-import com.tf414.app.rsseditor.util.SearchTextField;
 
 public class MainMenu {
 	

@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.tf414.app.rsseditor.model.RSSChannel;
-import com.tf414.app.rsseditor.model.RSSLabel;
+import com.tf414.app.rsseditor.data.RSSChannel;
+import com.tf414.app.rsseditor.data.RSSLabel;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 
 import javax.swing.JButton;
