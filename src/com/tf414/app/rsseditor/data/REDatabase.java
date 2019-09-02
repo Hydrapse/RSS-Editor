@@ -2,6 +2,7 @@ package com.tf414.app.rsseditor.data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,17 +37,46 @@ public class REDatabase {
 	private void executeCreateSQL(String sql) throws SQLException {
 		Statement s = con.createStatement();
 		s.execute(sql);
+		s.close();
+	}
+	
+	private int executeInsertSQL(String sql) throws SQLException {
+		Statement s = con.createStatement();
+		int i = s.executeUpdate(sql);
+		s.close();
+		return i;
+	}
+	
+	private int executeUpdateSQL(String sql) throws SQLException {
+		Statement s = con.createStatement();
+		int i = s.executeUpdate(sql);
+		s.close();
+		return i;
+	}
+	
+	private int executeRemoveSQL(String sql) throws SQLException {
+		Statement s = con.createStatement();
+		int i = s.executeUpdate(sql);
+		s.close();
+		return i;
+	}
+	
+	private ResultSet executeSelectSQL(String sql) throws SQLException {
+		Statement s = con.createStatement();
+		ResultSet r = s.executeQuery(sql);
+		s.close();
+		return r;
 	}
 
 	public void insertItem(RSSItem item) throws SQLException {
 
 	}
 
-	public void insertChannel(RSSChannel item) throws SQLException {
+	public void insertChannel(RSSChannel channel) throws SQLException {
 
 	}
 
-	public void insertLabel(RSSLabel item) throws SQLException {
+	public void insertLabel(RSSLabel label, RSSChannel channel) throws SQLException {
 
 	}
 	
@@ -74,21 +104,43 @@ public class REDatabase {
 
 	}
 
-	private void createItemTable() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS item\n" + "(\n" + "label varchar(20),\n" + "channelID integer\n"
+	private void createChannelTable() throws SQLException {
+		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
+				+ "(\n"
+				+ "channelID integer NOT NULL PRIMARY KEY,\n"
+				+ "name varchar(50) NOT NULL PRIMARY KEY,\n"
+				+ "description varchar(2000),\n"
+				+ "link varchar(255),\n"
+				+ "generator varchar(255),\n"
+				+ "webMaster varchar(255),\n"
+				+ "logoPath varchar(255),\n"
+				+ "language varchar(10),\n"
+				+ "lastBuildDate date,\n"
+				+ "isLike tinyint\n"
 				+ ");";
 		executeCreateSQL(sql);
 	}
 
 	private void createLabelTable() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS label\n" + "(\n" + "label varchar(20),\n" + "channelID integer\n"
+		String sql = "CREATE TABLE IF NOT EXISTS labels\n"
+				+ "(\n"
+				+ "label varchar(50) NOT NULL,\n"
+				+ "channelID integer NOT NULL FOREIGN KEY REFERENCES channels(channelID)\n"
 				+ ");";
 		executeCreateSQL(sql);
 	}
 
-	private void createChannelTable() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS channel\n" + "(\n" + "channelID integer,\n" + "title varchar(20),\n"
-				+ "description varchar(q)\n" + ");";
+	private void createItemTable() throws SQLException {
+		String sql = "CREATE TABLE IF NOT EXISTS items\n"
+				+ "(\n" 
+				+ "channelID integer FOREIGN KEY REFERENCES channels(channelID) PRIMARY KEY,\n"
+				+ "title varchar(50),\n"
+				+ "description varchar(2000),\n"
+				+ "link varchar(255),\n"
+				+ "pubDate date,\n"
+				+ "author varchar(255),\n"
+				+ "hasRead tinyint\n"
+				+ ");";
 		executeCreateSQL(sql);
 	}
 

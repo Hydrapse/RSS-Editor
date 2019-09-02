@@ -9,15 +9,14 @@ public class RSSItem {
 	private String author;
 	private RSSChannel channel;
 	private String link;
-	
-	
-	public RSSItem(String title) {
+	private boolean hasRead;
+
+	public RSSItem(RSSChannel channel, String title) {
 		super();
 		this.title = title;
 	}
 
-	public RSSItem(String title, String description, Date dateCreated, String author, RSSChannel channel,
-			String link) {
+	public RSSItem(RSSChannel channel, String title, String description, Date dateCreated, String author, String link) {
 		super();
 		this.title = title;
 		this.description = description;
@@ -27,10 +26,13 @@ public class RSSItem {
 		this.link = link;
 	}
 
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((channel == null) ? 0 : channel.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -44,6 +46,11 @@ public class RSSItem {
 		if (getClass() != obj.getClass())
 			return false;
 		RSSItem other = (RSSItem) obj;
+		if (channel == null) {
+			if (other.channel != null)
+				return false;
+		} else if (!channel.equals(other.channel))
+			return false;
 		if (title == null) {
 			if (other.title != null)
 				return false;
@@ -51,80 +58,90 @@ public class RSSItem {
 			return false;
 		return true;
 	}
-	
+
 	public String getTitle() {
-		if (title.isEmpty()||title==null) {
-			return ""; 
-		}
+		if (title.isEmpty() || title == null) {
+			return "";
+		}w
 		return title;
 	}
-	
+
 	public String getDescription() {
-		if (description.isEmpty()||description==null) {
-			return ""; 
+		if (description.isEmpty() || description == null) {
+			return "";
 		}
 		return description;
 	}
-	
+
 	public Date getDateCreated() {
-		if (dateCreated==null) {
+		if (dateCreated == null) {
 			System.out.println("Date is blank");
 			long defTime = 0;
 			dateCreated.setTime(defTime);
 		}
 		return dateCreated;
 	}
-	
+
 	public String getAuthor() {
-		if (author.isEmpty()||author==null) {
-			return ""; 
+		if (author.isEmpty() || author == null) {
+			return "";
 		}
 		return author;
 	}
-	
+
 	public RSSChannel getChannel() {
-		if (channel==null) {
-			System.out.println("channel is blank"); 
+		if (channel == null) {
+			System.out.println("channel is blank");
 		}
 		return channel;
 	}
-	
+
 	public String getLink() {
-		if (link.isEmpty()||link==null) {
-			return ""; 
+		if (link.isEmpty() || link == null) {
+			return "";
 		}
 		return link;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-	
+
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	
+
 	public void setChannel(RSSChannel channel) {
 		this.channel = channel;
 	}
-	
+
 	public void setLink(String link) {
 		this.link = link;
 	}
 	
-	//test 
-	public void printAll() {
-		System.out.println("title:"+title+"\ndes:"+description+"\ndate:"+dateCreated.toString()+"\naut:"+author+"\nchannel"+channel.getName()
-		+"\nlink"+link);
+	public boolean hasRead() {
+		return hasRead;
 	}
-//	private String title;
-//	private String description;
-//	private Date dateCreated;
-//	private String author;
-//	private RSSChannel channel;
-//	private String link;
+	
+	public void setRead(boolean hasRead) {
+		this.hasRead = hasRead;
+	}
+	
+	@Override
+	public String toString() {
+		return "RSSItem [title=" + title + ", description=" + description + ", dateCreated=" + dateCreated + ", author="
+				+ author + ", channel=" + channel + ", link=" + link + ", hasRead=" + hasRead + "]";
+	}
+
+	/**
+	 * test
+	 */
+	public void printAll() {
+		System.out.println(this);
+	}
+
 }

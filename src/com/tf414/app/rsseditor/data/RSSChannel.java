@@ -1,40 +1,41 @@
 package com.tf414.app.rsseditor.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import com.sun.xml.internal.ws.util.StringUtils;
 
 public class RSSChannel {
 	private String name;
-	private String url;
+	private String link;
 	private String logoPath;
 	private String description;
+	private String generator;
+	private String webMaster;
+	private String language;
+	private Date lastBuildDate;
 	private List<RSSItem> items;
-	
+	private boolean isLike;
 	
 	public RSSChannel(String name) {
 		super();
 		this.name = name;
 		items = new ArrayList<RSSItem>();
 	}
-
-	public RSSChannel(String name, String url, String logoPath) {
+	
+	public RSSChannel(String name, String link, String logoPath, String description, String generator, String webMaster,
+			String  language, Date lastBuildDate) {
 		super();
 		this.name = name;
-		this.url = url;
+		this.link = link;
 		this.logoPath = logoPath;
+		this.description = description;
+		this.generator = generator;
+		this.webMaster = webMaster;
+		this.language = language;
+		this.lastBuildDate = lastBuildDate;
 		items = new ArrayList<RSSItem>();
 	}
 	
-	public RSSChannel(String name, String url, String logoPath, List<RSSItem> items) {
-		super();
-		this.name = name;
-		this.url = url;
-		this.logoPath = logoPath;
-		this.items = items;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -59,7 +60,7 @@ public class RSSChannel {
 			return false;
 		return true;
 	}
-	
+
 	public String getName() {
 		if (name.isEmpty()||name==null) {
 			return ""; 
@@ -67,15 +68,15 @@ public class RSSChannel {
 		return name;
 	}
 	
-	public String getUrl() {
-		if (url.isEmpty()||url==null) {
+	public String getLink() {
+		if (link.isEmpty()||link==null) {
 			return ""; 
 		}
-		return url;
+		return link;
 	}
 	
-	public void setUrl(String url) {
-		this.url = url;
+	public void setLink(String link) {
+		this.link = link;
 	}
 
 	public String getLogoPath() {
@@ -107,8 +108,56 @@ public class RSSChannel {
 	public void addItem(RSSItem item) {
 		items.add(item);
 	}
+	
+	public String getGenerator() {
+		return generator;
+	}
+
+	public void setGenerator(String generator) {
+		this.generator = generator;
+	}
+
+	public String getWebMaster() {
+		return webMaster;
+	}
+
+	public void setWebMaster(String webMaster) {
+		this.webMaster = webMaster;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public Date getLastBuildDate() {
+		return lastBuildDate;
+	}
+
+	public void setLastBuildDate(Date lastBuildDate) {
+		this.lastBuildDate = lastBuildDate;
+	}
+	
+	public boolean isLike() {
+		return isLike;
+	}
+	
+	public void setLike(boolean isLike) {
+		this.isLike = isLike;
+	}
+
+	@Override
+	public String toString() {
+		return "RSSChannel [name=" + name + ", url=" + link + ", logoPath=" + logoPath + ", description=" + description
+				+ ", generator=" + generator + ", webMaster=" + webMaster + ", language=" + language
+				+ ", lastBuildDate=" + lastBuildDate + ", items=" + items + ", isLike=" + isLike + "]";
+	}
+
 	//test
-	public void printAllChannel() {
+	public void printAllItems() {
 		for (RSSItem rssItem : items) {
 			rssItem.printAll();
 		}
