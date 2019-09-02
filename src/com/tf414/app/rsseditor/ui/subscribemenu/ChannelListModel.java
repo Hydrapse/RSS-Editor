@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 
-import com.tf414.app.rsseditor.model.RSSChannel;
+import com.tf414.app.rsseditor.data.RSSChannel;
 
 //用来提供ListMode对象
 public class ChannelListModel extends DefaultListModel<RSSChannel>{

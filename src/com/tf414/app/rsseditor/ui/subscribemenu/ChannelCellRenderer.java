@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.SwingConstants;
 
-import com.tf414.app.rsseditor.model.RSSChannel;
+import com.tf414.app.rsseditor.data.RSSChannel;
 
 //RightJList的渲染器
 public class ChannelCellRenderer extends DefaultListCellRenderer{

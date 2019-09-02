@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.tf414.app.rsseditor.model.RSSChannel;
-import com.tf414.app.rsseditor.model.RSSLabel;
+import com.tf414.app.rsseditor.data.RSSChannel;
+import com.tf414.app.rsseditor.data.RSSLabel;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 
 import javax.swing.JButton;
@@ -133,8 +133,8 @@ public class SubscribeMenu extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(channelList);
 		rightPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		RSSChannel test1 = new RSSChannel(1, "百度", "www.baidu.com", "logoPath/example.jpg");
-		RSSChannel test2 = new RSSChannel(2, "百度2", "www.baidu.com", "logoPath/example.jpg"); 
+		RSSChannel test1 = new RSSChannel("百度", "www.baidu.com", "logoPath/example.jpg");
+		RSSChannel test2 = new RSSChannel("百度2", "www.baidu.com", "logoPath/example.jpg"); 
 
 		chlistModel.addElement(test1);
 		chlistModel.addElement(test2);
