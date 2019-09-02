@@ -10,7 +10,7 @@ import javax.swing.tree.TreePath;
 public class Tree extends JTree {
 	
 	private boolean secondNodeExpand=false;
-	public Tree(DefaultMutableTreeNode node) {
+	public Tree(TreeNode node) {
 		super(node);
 	}
 	
@@ -39,18 +39,21 @@ public class Tree extends JTree {
         }
 	}
 	
-	public void shrinkNode(DefaultMutableTreeNode aNode) {
+	public void shrinkNode(TreeNode aNode) {
 	    if (aNode.isLeaf()) {
 	      return;
 	    }
-	    TreePath path=new TreePath(aNode.getPath());
+	    if(aNode instanceof FriTreeNode ) {
+	    	TreePath path=new TreePath(((FriTreeNode)aNode).getPath());
 	    this.collapsePath(path);
+	    }
+	    
 	  }
 	
 	public void shrinkTree() {
-		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)this.getModel().getRoot();
+		TreeNode rootNode = (TreeNode)this.getModel().getRoot();
 		for(int i=0 ; i<rootNode.getChildCount() ; ++i) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)rootNode.getChildAt(i);
+			TreeNode node = (TreeNode)rootNode.getChildAt(i);
 			shrinkNode(node);
 		}
 		secondNodeExpand=false;

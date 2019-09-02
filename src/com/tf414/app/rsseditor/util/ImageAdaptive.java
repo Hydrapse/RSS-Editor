@@ -162,7 +162,7 @@ public class ImageAdaptive {
 	     */
 	    public static ImageIcon createAutoAdjustIcon(String url) {
 	    	String imageName = deafultImageUrlAndName;
-    		return createAutoAdjustIcon(url,false,imageName);
+    		return createAutoAdjustIcon(url,true,imageName);
 	    }
 
 }

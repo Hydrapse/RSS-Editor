@@ -23,14 +23,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
 
 import com.tf414.app.rsseditor.model.RSSChannel;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
+import com.tf414.app.rsseditor.util.FriTreeNode;
+import com.tf414.app.rsseditor.util.FriTreeRender;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
 import com.tf414.app.rsseditor.util.SearchTextField;
 import com.tf414.app.rsseditor.util.Tree;
@@ -43,7 +48,7 @@ public class MainMenu {
 	
 	private JPanel menu = null;			//菜单栏
 	
-	private JPanel channelList = null;	//频道栏
+	private JScrollPane channelList = null;	//频道栏
 
 	private JButton SubscribeMenu = null;  //
 	
@@ -69,8 +74,6 @@ public class MainMenu {
 		
 		this.menu = new JPanel();
 		
-		this.channelList = new JPanel();
-		
 		this.initMenu();
 
 		this.addMenuButtonListener();
@@ -82,7 +85,7 @@ public class MainMenu {
 		
 		this.topWindow.setTitle("RSS");
 		
-		this.topWindow.setResizable(false);
+//		this.topWindow.setResizable(false);
 		this.topWindow.setVisible(true);
 		this.topWindow.setLocationRelativeTo(null);	
 	}
@@ -91,15 +94,17 @@ public class MainMenu {
 		
 		int[] lengthConfig = AutoadaptWindowSize.getMainMenuGeometry();
 		
-		this.topWindow.setSize(lengthConfig[2], lengthConfig[3]);
+		this.topWindow.setBounds(0, 0, lengthConfig[2],lengthConfig[3]);
+		
+		System.out.println("topWindowheight"+lengthConfig[3]);
 		
 		this.topWindow.setLayout(null);
 		
 		this.menu.setBounds(0, 0, lengthConfig[2],(int)(lengthConfig[2]*0.26));
 
-		this.channelList.setBounds(0,(int)(lengthConfig[2]*0.26),lengthConfig[2],this.topWindow.getHeight()-(int)(lengthConfig[2]*0.26));
+		this.channelList.setBounds(0,(int)(lengthConfig[2]*0.26),lengthConfig[2],lengthConfig[3]-(int)(lengthConfig[2]*0.26)-42);
 
-		this.channelTree.setBounds(0, 0, lengthConfig[2],this.topWindow.getHeight()-(int)(lengthConfig[2]*0.26));
+
 		this.topWindow.add(menu);
 		this.topWindow.add(channelList);
 		
@@ -153,27 +158,34 @@ public class MainMenu {
 	}
 	
 	public void initChannelList() {
-		this.channelList = new JPanel();
-		this.channelList.setLayout(new BoxLayout(channelList,BoxLayout.Y_AXIS));
 		
-		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode();
+	
+		
+		FriTreeNode rootNode = new FriTreeNode();
 		for(int i=0 ; i<channels.size();++i) {
-			 DefaultMutableTreeNode chiNode = new DefaultMutableTreeNode(channels.get(i).getName());
+			FriTreeNode chiNode = new FriTreeNode(channels.get(i).getName());
 			 for(int j=0 ; j<30 ; ++j) {
-				 DefaultMutableTreeNode chiNode1 =  new DefaultMutableTreeNode("j="+j);
-				 chiNode.add(chiNode1);
+				 FriTreeNode chiNode1 =  new FriTreeNode("j="+j);
+				 chiNode.addchild(chiNode1);
+				 chiNode.setImg(new ImageIcon("./icon/QQ.jpg"));
 			 }
-			 rootNode.add(chiNode);
+			 rootNode.addchild(chiNode);
 		}
 		
 		channelTree = new Tree(rootNode);
-//		channelTree.setPreferredSize(new Dimension(channelList.getWidth(),channelList.getHeight()));
-		channelTree.setBackground(Color.yellow);
+		channelTree.setBackground(Color.white);
 		channelTree.setRootVisible(false);
+		channelTree.setCellRenderer(new FriTreeRender());
+
 		
-		this.channelList.add(channelTree);
-		this.channelList.setLayout(null);
-		this.channelList.setBackground(Color.green);
+		channelTree.setFont(new Font(Font.SANS_SERIF, Font.LAYOUT_LEFT_TO_RIGHT, 18));
+		channelTree.setRowHeight(50);
+		channelTree.setToggleClickCount(1);
+		channelTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		channelTree.putClientProperty("JTree.lineStyle", "Horizontal");
+		
+		
+		this.channelList = new JScrollPane(channelTree);
 		this.channelList.setVisible(true);
 		this.topWindow.add(channelList);
 	}
@@ -206,10 +218,8 @@ public class MainMenu {
 			public void actionPerformed(ActionEvent e)
 			{
 			 	if(searchTextField.isVisible()) {
-
 					searchTextField.setVisible(false);
 					menu.updateUI();
-
 			 	}
 			 	else {
 					searchTextField.setVisible(true);
@@ -239,20 +249,6 @@ public class MainMenu {
 	
 	
 	//-----------------------------------
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 
