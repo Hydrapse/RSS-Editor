@@ -58,8 +58,8 @@ public final class DOMReader {
         		link = n.getTextContent();
         	}
 		}
-		RSSItem item = new RSSItem(title, description, dateCreated, author, pchannel, link);
-//		System.out.println(item.getTitle());
+		RSSItem item = new RSSItem(pchannel,title,description,dateCreated,author,link);
+		System.out.println(item.toString());
 //		item.printAll();
 		channel.addItem(item);
 	}
@@ -82,7 +82,7 @@ public final class DOMReader {
 		for(int i=0; i<nl.getLength(); ++i) {
         	Node n = nl.item(i);
         	if(n.getNodeName().contentEquals("link")) {
-        		channel.setUrl(n.getTextContent());
+        		channel.setLink(n.getTextContent());
         	}
         	else if(n.getNodeName().contentEquals("description")) {
         		channel.setDescription(n.getTextContent());
@@ -103,10 +103,13 @@ public final class DOMReader {
 		for(int i=0; i<nl.getLength(); ++i) {
 //			List<Channel> channelList = new ArrayList<Channel>();
         	Node n = nl.item(i);
+        	channelRead(n);
+        	System.out.print("2");
 		}
 	}
 	
 	public static void read(String url) throws ParserConfigurationException, IOException, SAXException{
+		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         InputStream is = HTTPReader.read(url);
@@ -115,6 +118,7 @@ public final class DOMReader {
         for(int i=0; i<nl.getLength(); ++i) {
         	Node n = nl.item(i);
         	rssRead(n);
+        	System.out.print("1");
         }
 	}
 }
