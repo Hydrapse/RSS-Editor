@@ -69,39 +69,108 @@ public class REDatabase {
 	}
 
 	public void insertItem(RSSItem item) throws SQLException {
-
+			String sql="INSERT INTO items VALUES ("
+					+ "uuid(),"
+					+ item.getTitle()+","
+					+ item.getDescription()+","
+					+ item.getLink()+","
+					+ item.getDateCreated()+","
+					+ item.getAuthor()+","
+					+ item.hasRead()+","
+					+")";
+			executeInsertSQL(sql);
 	}
 
 	public void insertChannel(RSSChannel channel) throws SQLException {
-
+		String sql="INSERT INTO channnels VALUES ("
+				+ "uuid(),"
+				+ channel.getTitle()+","
+				+ channel.getDescription()+","
+				+ channel.getLink()+","
+				+ channel.getGenerator()+","
+				+ channel.getWebMaster()+","
+				+ channel.getLogoPath()+","
+				+ channel.getLanguage()+","
+				+ channel.getLastBuildDate() + ","
+				+ channel.isLink() +","
+				+")";
+		executeInsertSQL(sql);
 	}
 
 	public void insertLabel(RSSLabel label, RSSChannel channel) throws SQLException {
-
+		String select = "SELECT channels * WHERE name='"+channel.getName()+"'";
+		
+		executeSelectSQL(select);
+		
+		String sql="INSERT INTO labels VALUES ("
+				+ label.getName()+","
+				+ channel.getName()
+				+")";
+		executeInsertSQL(sql);
 	}
 	
 	public void updateItem(RSSItem item) throws SQLException {
-
+			
+			String sql = "UPDATE items SET "
+					+ "title = '"+item.getTitle()+"',"
+					+ "description = '"+item.getDescription()+"',"
+					+ "link = '"+item.getLink()+"',"
+					+ "pubDate = "+item.getDateCreated()
+					+ "author = '"+item.getAuthor()+"',"
+					+ "hasRead = "+item.hasRead()
+					+ " WHERE channelID='"+item.getChannel()+"'";
+			executeUpdateSQL(sql);
+			
 	}
 
-	public void updateChannel(RSSChannel item) throws SQLException {
-
+	public void updateChannel(RSSChannel channel) throws SQLException {
+			String sql="UPDATE channels SET "
+					+ "description = '"+channel.getDescription()+"',"
+					+ "link = '" +channel.getLink()+"',"
+					+ "generator = '"+channel.getGenerator()+"',"
+					+ "webMaster = '"+channel.getWebMaster()+"',"
+					+ "logoPath = '"+channel.getLogoPath()+"',"
+					+ "language = '"+channel.getLanguage()+"',"
+					+ "lastBuildDate = "+channel.getLastBuildDate()+","
+					+ "isLike = "+channel.isLink()+","
+					+" WHERE name ='"+channel.getName()+"'";
+			executeUpdateSQL(sql);
 	}
 
-	public void updateLabel(RSSLabel item) throws SQLException {
-
+	public void updateLabel(RSSLabel label) throws SQLException {
+		ArrayList<RSSChannel> list=label.getChannelList();
+		for(int i=0 ; i<list.size() ; ++i) {
+			RSSChannel channel = list.get(i);
+			String select = "SELECT channelID FROM channels WHERE name='"+channel.getName()+"'";
+			int channelID = executeSelectSQL(select);
+			String sql="UPDATE labels SET "
+				+ "label ='"+label.getName()+"' "
+				+ "WHERE channelID="+channelID;
+			executeUpdateSQL(sql);
+		}
+		
 	}
 	
 	public void removeItem(int channelID, String name) throws SQLException {
-
+		String sql="DELETE FROM items WHERE channelID="+channelID+" AND name='"+name+"'";
+		executeRemoveSQL(sql);
 	}
 
 	public void removeChannel(String channel) throws SQLException {
-
+		String selectChannelID = "SELECT channelID FROM channels WHERE name='"+channel+"'";
+		int channelID=executeSelectSQL(selectChannelID);
+		String delItem = "DELETE FROM items WHERE in channelID="+channelID;
+		String delLab = "DELETE FROM labels WHERE in channelID="+channelID;
+		String delCha="DELETE FROM channels WHERE name='"+channel+"'";
+		executeRemoveSQL(delItem);
+		executeRemoveSQL(delLab);
+		executeRemoveSQL(delCha);
+		
 	}
 
 	public void removeLabel(String label) throws SQLException {
-
+		String sql = "DELETE FROM labels WHERE label='"+label+"'";
+		executeRemoveSQL(sql);
 	}
 
 	private void createChannelTable() throws SQLException {

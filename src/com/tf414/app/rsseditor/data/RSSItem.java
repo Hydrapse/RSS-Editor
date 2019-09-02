@@ -62,7 +62,7 @@ public class RSSItem {
 	public String getTitle() {
 		if (title.isEmpty() || title == null) {
 			return "";
-		}w
+		}
 		return title;
 	}
 
