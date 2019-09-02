@@ -155,8 +155,8 @@ public class RSSChannel {
 				+ ", generator=" + generator + ", webMaster=" + webMaster + ", language=" + language
 				+ ", lastBuildDate=" + lastBuildDate + ", items=" + items + ", isLike=" + isLike + "]";
 	}
-
-	//test
+	//there some mistake with toString
+	
 	public void printAllItems() {
 		for (RSSItem rssItem : items) {
 			rssItem.printAll();
