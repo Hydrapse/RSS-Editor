@@ -73,7 +73,7 @@ public class REDatabase {
 	private ResultSet executeSelectSQL(String sql) throws SQLException {
 		Statement s = con.createStatement();
 		ResultSet r = s.executeQuery(sql);
-		s.close();
+//		s.close();
 		return r;
 	}
 	

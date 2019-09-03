@@ -54,6 +54,7 @@ public class RSSController {
 			for(RSSItem item: c.getItems()) {
 				REDatabase.getInstance().insertItem(item);
 			}
+			REDatabase.getInstance().insertChannel(c);
 			REDatabase.getInstance().insertLabel(label, c);
 		} catch (Exception e) {
 			e.printStackTrace();
