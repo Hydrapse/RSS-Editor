@@ -47,12 +47,29 @@ public class RSSController {
 		return null;
 	}
 	
-	public boolean addRSSChannel(String label, String url) {
-		RSSChannel c = DOMReader.read(url);
-		REDatabase.getInstance().insertChannel(c);
-		for(RSSItem item: c.getItems()) {
-			REDatabase.getInstance().insertItem(item);
+	public void addRSSChannel(String label, String url) {
+		try {
+			RSSChannel c = DOMReader.read(url);
+			REDatabase.getInstance().insertChannel(c);
+			for(RSSItem item: c.getItems()) {
+				REDatabase.getInstance().insertItem(item);
+			}
+			REDatabase.getInstance().insertLabel(label, c);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return REDatabase.getInstance().insertLabel(label, c);
+	}
+	
+	public void addRSSChannel(String url) {
+		try {
+			RSSChannel c = DOMReader.read(url);
+			REDatabase.getInstance().insertChannel(c);
+			for(RSSItem item: c.getItems()) {
+				REDatabase.getInstance().insertItem(item);
+			}
+			REDatabase.getInstance().insertChannel(c);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
