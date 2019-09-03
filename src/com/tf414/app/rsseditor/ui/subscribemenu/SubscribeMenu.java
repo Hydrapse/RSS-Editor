@@ -62,7 +62,7 @@ public class SubscribeMenu extends JFrame {
 	public SubscribeMenu() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		int[] geo = AutoadaptWindowSize.getSubscribeMenuGeometry();
+		int[] geo = AutoadaptWindowSize.getPreferencesGeometry();
 		setBounds(geo[0], geo[1], geo[2], geo[3]);
 		width = geo[2];
 		height = geo[3];
@@ -133,10 +133,10 @@ public class SubscribeMenu extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(channelList);
 		rightPanel.add(scrollPane, BorderLayout.CENTER);
 		
-		RSSChannel test1 = new RSSChannel("百度", "www.baidu.com", "logoPath/example.jpg");
-		RSSChannel test2 = new RSSChannel("百度2", "www.baidu.com", "logoPath/example.jpg"); 
+//		RSSChannel test1 = new RSSChannel("百度", "www.baidu.com", "logoPath/example.jpg");
+//		RSSChannel test2 = new RSSChannel("百度2", "www.baidu.com", "logoPath/example.jpg"); 
 
-		chlistModel.addElement(test1);
-		chlistModel.addElement(test2);
+//		chlistModel.addElement(test1);
+//		chlistModel.addElement(test2);
 	}
 }

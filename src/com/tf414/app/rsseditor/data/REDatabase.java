@@ -7,14 +7,12 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class REDatabase {
-	public static void main(String[] args) {
-		REDatabase.init();
-	}
-	
-	private static final String HOST = "127.0.0.1";
+	private static final String HOST = "localhost";
 	private static final int PORT = 3306;
 	private static final String DATABASE_NAME = "RSSEditor";
 	private static final String USERNAME = "root";
@@ -74,59 +72,10 @@ public class REDatabase {
 		s.close();
 		return r;
 	}
-	
-	private RSSItem resultSetToRSSItem(ResultSet rs) throws SQLException {
-		int channelID = rs.getInt("channelID");
-		String sql = "SELECT * FROM channels WHERE channelID = " + channelID + ";";
-		ResultSet rs1 = executeSelectSQL(sql);
-		if(rs.getFetchSize() == 0) {
-			throw new IllegalArgumentException("No channel use id " + channelID);
-		}
-		RSSChannel channel = new RSSChannel(rs1.getString("name"), rs1.getString("link"), rs1.getString("logoPath"), rs1.getString("description"), rs1.getString("generator"), rs1.getString("webMaster"),
-				rs1.getString("language"), rs1.getDate("lastBuildDate"));
-		return new RSSItem(channel, rs.getString("title"), rs.getString("description"), rs.getDate("dateCreated"), rs.getString("author"), rs.getString("link"));
-	}
-	
-	public RSSChannel selectChannelByChannelID(int channelID) throws SQLException {
-		String sql = "SELECT * FROM channels WHERE channelID = " + channelID + ";";
-		ResultSet rs = executeSelectSQL(sql);
-		if(rs.getFetchSize() == 0) {
-			throw new IllegalArgumentException("No channel use id " + channelID);
-		}
-		 RSSChannel channel = new RSSChannel(rs.getString("name"), rs.getString("link"), rs.getString("logoPath"), rs.getString("description"), rs.getString("generator"), rs.getString("webMaster"),
-				rs.getString("language"), rs.getDate("lastBuildDate"));
-		 for(RSSItem item: selectItemFromChannel(channel)) {
-			 channel.addItem(item);
-		 }
-		 return channel;
-	}
-	
-	public List<RSSItem> selectItemAll() throws SQLException{
-		List<RSSItem> allItems = new ArrayList<RSSItem>();
-		String sql = "SELECT * FROM items;";
-		ResultSet rs = executeSelectSQL(sql);
-		for(int i = 0; i < rs.getFetchSize(); ++i) {
-			allItems.add(resultSetToRSSItem(rs));
-			rs.next();
-		}
-		return allItems;
-	}
-	
-	public List<RSSItem> selectItemFromChannel(RSSChannel channel) throws SQLException {
-		List<RSSItem> items = new ArrayList<RSSItem>();
-		String sql = "SELECT * FROM items WHERE channelID=" + channel.getId() + ";";
-		ResultSet rs = executeSelectSQL(sql);
-		for(int i = 0; i < rs.getFetchSize(); ++i) {
-			items.add(resultSetToRSSItem(rs));
-			rs.next();
-		}
-		return items;
-	}
 
 	public void insertItem(RSSItem item) throws SQLException {
-			
 			String sql="INSERT INTO items VALUES ("
-					+ item.getChannel().getId()+","
+					+ "uuid(),"
 					+ item.getTitle()+","
 					+ item.getDescription()+","
 					+ item.getLink()+","
@@ -194,12 +143,11 @@ public class REDatabase {
 	}
 
 	public void updateLabel(RSSLabel label) throws SQLException {
-		List<RSSChannel> list=label.getChannelList();
+		List<RSSChannel> list= label.getChannelList();
 		for(int i=0 ; i<list.size() ; ++i) {
 			RSSChannel channel = list.get(i);
 			String select = "SELECT channelID FROM channels WHERE name='"+channel.getName()+"'";
-			ResultSet rs = executeSelectSQL(select);
-			int channelID = rs.getInt(0);
+			int channelID = (int) executeSelectSQL(select).getObject(0);
 			String sql="UPDATE labels SET "
 				+ "label ='"+label.getName()+"' "
 				+ "WHERE channelID="+channelID;
@@ -213,20 +161,15 @@ public class REDatabase {
 		executeRemoveSQL(sql);
 	}
 
-	public boolean removeChannel(String channel) throws SQLException {
+	public void removeChannel(String channel) throws SQLException {
 		String selectChannelID = "SELECT channelID FROM channels WHERE name='"+channel+"'";
-		ResultSet rs = executeSelectSQL(selectChannelID);
-		if(rs.getRow() == 0) {
-			return false;
-		}
-		int channelID = rs.getInt(0);
-		String delItem = "DELETE FROM items WHERE channelID="+channelID;
-		String delLab = "DELETE FROM labels WHERE channelID="+channelID;
-		String delCha = "DELETE FROM channels WHERE channelID="+channelID;
+		int channelID=(int)executeSelectSQL(selectChannelID).getObject(0);
+		String delItem = "DELETE FROM items WHERE in channelID="+channelID;
+		String delLab = "DELETE FROM labels WHERE in channelID="+channelID;
+		String delCha="DELETE FROM channels WHERE name='"+channel+"'";
 		executeRemoveSQL(delItem);
 		executeRemoveSQL(delLab);
 		executeRemoveSQL(delCha);
-		return true;
 		
 	}
 
@@ -284,8 +227,8 @@ public class REDatabase {
 	public void createChannelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
 				+ "(\n"
-				+ "channelID integer NOT NULL PRIMARY KEY,\n"
-				+ "name varchar(50) NOT NULL,\n"
+				+ "channelID integer NOT NULL PRIMARY KEY ,\n"
+				+ "name varchar(50) NOT NULL ,\n"
 				+ "description varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "generator varchar(255),\n"
@@ -302,8 +245,7 @@ public class REDatabase {
 		String sql = "CREATE TABLE IF NOT EXISTS labels\n"
 				+ "(\n"
 				+ "label varchar(50) NOT NULL,\n"
-				+ "channelID integer NOT NULL,\n"
-				+ "FOREIGN KEY (channelID) REFERENCES channels(channelID)\n"
+				+ "channelID integer NOT NULL FOREIGN KEY REFERENCES channels(channelID)\n"
 				+ ");";
 		executeCreateSQL(sql);
 	}
@@ -311,24 +253,21 @@ public class REDatabase {
 	public void createItemTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS items\n"
 				+ "(\n" 
-				+ "channelID integer PRIMARY KEY,\n"
+				+ "channelID integer FOREIGN KEY REFERENCES channels(channelID),\n"
 				+ "title varchar(50),\n"
 				+ "'description' varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "pubDate date,\n"
 				+ "author varchar(255),\n"
 				+ "hasRead tinyint,\n"
-				+ "FOREIGN KEY (channelID) REFERENCES channels(channelID)\n"
+				+ "PRIMARY KEY(channelID, title)"
 				+ ");";
 		executeCreateSQL(sql);
 	}
-  
-	private REDatabase(String host, int port, String databaseName, String username, String password) throws Exception {
-		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
-		createChannelTable();
-		createLabelTable();
-		createItemTable();
+
+	public REDatabase(String host, int port, String databaseName, String username, String password) throws Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName+"?serverTimezone=UTC", username, password);
 		System.out.println("Successfully connected to mysql");
 	}
 

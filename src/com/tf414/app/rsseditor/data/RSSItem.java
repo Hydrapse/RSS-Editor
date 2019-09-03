@@ -60,14 +60,14 @@ public class RSSItem {
 	}
 
 	public String getTitle() {
-		if (title == null) {
+		if (title.isEmpty() || title == null) {
 			return "";
 		}
 		return title;
 	}
 
 	public String getDescription() {
-		if (description == null) {
+		if (description.isEmpty() || description == null) {
 			return "";
 		}
 		return description;
@@ -83,7 +83,7 @@ public class RSSItem {
 	}
 
 	public String getAuthor() {
-		if (author == null) {
+		if (author.isEmpty() || author == null) {
 			return "";
 		}
 		return author;
@@ -97,7 +97,7 @@ public class RSSItem {
 	}
 
 	public String getLink() {
-		if (link == null) {
+		if (link.isEmpty() || link == null) {
 			return "";
 		}
 		return link;
@@ -134,7 +134,7 @@ public class RSSItem {
 	@Override
 	public String toString() {
 		return "RSSItem [title=" + title + ", description=" + description + ", dateCreated=" + dateCreated + ", author="
-				+ author + ", link=" + link + ", hasRead=" + hasRead + "]";
+				+ author + ", channel=" + channel + ", link=" + link + ", hasRead=" + hasRead + "]";
 	}
 	//there is some mistake in toString
 	/**

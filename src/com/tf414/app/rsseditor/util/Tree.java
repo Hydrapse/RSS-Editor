@@ -1,7 +1,9 @@
 package com.tf414.app.rsseditor.util;
+import java.awt.Color;
 import java.util.Enumeration;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -10,6 +12,9 @@ public class Tree extends JTree {
 	private boolean secondNodeExpand=false;
 	public Tree(TreeNode node) {
 		super(node);
+//		DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+//		renderer.setBackgroundSelectionColor(new Color(0,0,0));//设置节点具有焦点时的背景色
+//		this.setCellRenderer(renderer);
 	}
 	
 	public void expandTree() {
