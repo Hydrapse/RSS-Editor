@@ -2,8 +2,6 @@ package com.tf414.app.rsseditor.util;
 import java.util.Enumeration;
 
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 

@@ -1,18 +1,15 @@
 package com.tf414.app.rsseditor.util;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-public class TreeListener implements TreeSelectionListener {
+public class TreeLeftListener implements TreeSelectionListener {
 	private JTree tree=null;
 	private JFrame window=null;
 	
-	public TreeListener(JTree tree,JFrame window){
+	public TreeLeftListener(JTree tree,JFrame window){
 		this.tree=tree;
 		this.window=window;
 	}	

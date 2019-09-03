@@ -1,3 +1,4 @@
+package com.tf414.app.rsseditor.util;
 
 import java.awt.Component;
 import java.awt.Dimension;

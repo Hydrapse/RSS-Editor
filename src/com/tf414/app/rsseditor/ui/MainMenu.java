@@ -163,11 +163,11 @@ public class MainMenu {
 		
 	
 		
-		FriTreeNode rootNode = new FriTreeNode();
+		FriTreeNode rootNode = new FriTreeNode("root",0);
 		for(int i=0 ; i<channels.size();++i) {
-			FriTreeNode chiNode = new FriTreeNode(channels.get(i).getName());
+			FriTreeNode chiNode = new FriTreeNode(channels.get(i).getName(),i);
 			 for(int j=0 ; j<30 ; ++j) {
-				 FriTreeNode chiNode1 =  new FriTreeNode("j="+j);
+				 FriTreeNode chiNode1 =  new FriTreeNode("j="+j,j);
 				 chiNode1.setImg(new ImageIcon("./icon/expand.jpg"));
 				 chiNode.addchild(chiNode1);
 			 }

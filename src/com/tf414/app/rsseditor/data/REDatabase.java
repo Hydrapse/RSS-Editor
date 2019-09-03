@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 public class REDatabase {
-	private static final String HOST = "127.0.0.1";
+	private static final String HOST = "localhost";
 	private static final int PORT = 3306;
 	private static final String DATABASE_NAME = "RSSEditor";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "g123456.0";
+	private static final String PASSWORD = "123456";
 
 	public static boolean isInit = false;
 	private static REDatabase instance;
@@ -189,51 +189,46 @@ public class REDatabase {
 		ResultSet result=executeSelectSQL(sql);
 		return resultSetToList(result);
 	}
-	public List selectHasRead(){
+	public List selectHasRead() throws SQLException{
 		String sql="SELECT * FROM items WHERE hasRead=1";
 		ResultSet result=null;
-		try {
-			result = executeSelectSQL(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		result = executeSelectSQL(sql);
 		return resultSetToList(result);
 	}
 	
-	public List resultSetToList(ResultSet result) {
+	public List resultSetToList(ResultSet result) throws SQLException {
 		ResultSetMetaData metaData=null;
 		int row =0;
-		try {
-			metaData = result.getMetaData();
-			 row = metaData.getColumnCount();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		metaData = result.getMetaData();
+		row = metaData.getColumnCount();
 		
 		List list=new ArrayList();
-		try {
-			while (result.next()) {
+		while (result.next()) {
 				Map rowData = new HashMap();
 				for (int i = 1; i <= row; i++) {
 					rowData.put(metaData.getColumnName(i), result.getObject(i));//获取键名及值
 				}
 				list.add(rowData);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		return list;
 	}
+	public List selectAllChannel() throws SQLException {
+		String sql = "SELECT * FROM channels";
+		ResultSet result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
 	
-	private void createChannelTable() throws SQLException {
+	public List selectItem(int channelID,String title) throws SQLException {
+		String sql="SELECT * FROM items WHERE channelID="+channelID+",title='"+title+"'";
+		ResultSet result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	
+	public void createChannelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
 				+ "(\n"
-				+ "channelID integer NOT NULL PRIMARY KEY,\n"
-				+ "name varchar(50) NOT NULL PRIMARY KEY,\n"
+				+ "channelID integer NOT NULL PRIMARY KEY ,\n"
+				+ "name varchar(50) NOT NULL ,\n"
 				+ "description varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "generator varchar(255),\n"
@@ -246,7 +241,7 @@ public class REDatabase {
 		executeCreateSQL(sql);
 	}
 
-	private void createLabelTable() throws SQLException {
+	public void createLabelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS labels\n"
 				+ "(\n"
 				+ "label varchar(50) NOT NULL,\n"
@@ -255,23 +250,24 @@ public class REDatabase {
 		executeCreateSQL(sql);
 	}
 
-	private void createItemTable() throws SQLException {
+	public void createItemTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS items\n"
 				+ "(\n" 
-				+ "channelID integer FOREIGN KEY REFERENCES channels(channelID) PRIMARY KEY,\n"
+				+ "channelID integer FOREIGN KEY REFERENCES channels(channelID),\n"
 				+ "title varchar(50),\n"
-				+ "description varchar(2000),\n"
+				+ "'description' varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "pubDate date,\n"
 				+ "author varchar(255),\n"
-				+ "hasRead tinyint\n"
+				+ "hasRead tinyint,\n"
+				+ "PRIMARY KEY(channelID, title)"
 				+ ");";
 		executeCreateSQL(sql);
 	}
 
 	public REDatabase(String host, int port, String databaseName, String username, String password) throws Exception {
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
+		Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName+"?serverTimezone=UTC", username, password);
 		System.out.println("Successfully connected to mysql");
 	}
 
