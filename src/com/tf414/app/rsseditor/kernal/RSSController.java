@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.tf414.app.rsseditor.data.REDatabase;
+import com.tf414.app.rsseditor.data.RSSChannel;
+import com.tf414.app.rsseditor.data.RSSItem;
 import com.tf414.app.rsseditor.data.RSSLabel;
 
 public class RSSController {
@@ -43,5 +45,14 @@ public class RSSController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public boolean addRSSChannel(String label, String url) {
+		RSSChannel c = DOMReader.read(url);
+		REDatabase.getInstance().insertChannel(c);
+		for(RSSItem item: c.getItems()) {
+			REDatabase.getInstance().insertItem(item);
+		}
+		return REDatabase.getInstance().insertLabel(label, c);
 	}
 }

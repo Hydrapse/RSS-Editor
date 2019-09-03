@@ -100,6 +100,12 @@ public class REDatabase {
 		return channel;
 	}
 	
+	private int getChannelIDByName(String name) throws SQLException {
+		String sql = "SELECT channelID FROM channels WHERE name = " + name + ";";
+		ResultSet rs = executeSelectSQL(sql);
+		return rs.getInt("channelID");
+	}
+	
 	public RSSChannel selectChannelByChannelID(int channelID) throws SQLException {
 		String sql = "SELECT * FROM channels WHERE channelID = " + channelID + ";";
 		ResultSet rs = executeSelectSQL(sql);
@@ -165,9 +171,9 @@ public class REDatabase {
 	}
 
 	public void insertItem(RSSItem item) throws SQLException {
-			
+			int channelID = getChannelIDByName(item.getChannel().getName());
 			String sql="INSERT INTO items VALUES ("
-					+ item.getChannel().getId()+","
+					+ channelID +","
 					+ item.getTitle()+","
 					+ item.getDescription()+","
 					+ item.getLink()+","
@@ -195,13 +201,10 @@ public class REDatabase {
 	}
 
 	public void insertLabel(RSSLabel label, RSSChannel channel) throws SQLException {
-		String select = "SELECT channels * WHERE name='"+channel.getName()+"'";
-		
-		executeSelectSQL(select);
-		
+		int channelID = getChannelIDByName(channel.getName());
 		String sql="INSERT INTO labels VALUES ("
 				+ label.getName()+","
-				+ channel.getName()
+				+ channelID
 				+")";
 		executeInsertSQL(sql);
 	}
