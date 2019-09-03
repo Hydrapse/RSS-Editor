@@ -89,6 +89,17 @@ public class REDatabase {
 		return new RSSItem(channel, rs.getString("title"), rs.getString("description"), rs.getDate("dateCreated"), rs.getString("author"), rs.getString("link"));
 	}
 	
+	private RSSChannel resultSetToRSSChannel(ResultSet rs) throws SQLException {
+		int channelID = rs.getInt("channelID");
+		RSSChannel channel = new RSSChannel(rs.getString("name"), rs.getString("link"), rs.getString("logoPath"), rs.getString("description"), rs.getString("generator"), rs.getString("webMaster"),
+				rs.getString("language"), rs.getDate("lastBuildDate"));
+		 for(RSSItem item: selectItemFromChannel(channel)) {
+			 channel.addItem(item);
+		 }
+		 channel.setId(channelID);
+		return channel;
+	}
+	
 	public RSSChannel selectChannelByChannelID(int channelID) throws SQLException {
 		String sql = "SELECT * FROM channels WHERE channelID = " + channelID + ";";
 		ResultSet rs = executeSelectSQL(sql);
@@ -97,6 +108,7 @@ public class REDatabase {
 		}
 		 RSSChannel channel = new RSSChannel(rs.getString("name"), rs.getString("link"), rs.getString("logoPath"), rs.getString("description"), rs.getString("generator"), rs.getString("webMaster"),
 				rs.getString("language"), rs.getDate("lastBuildDate"));
+		 channel.setId(channelID);
 		 for(RSSItem item: selectItemFromChannel(channel)) {
 			 channel.addItem(item);
 		 }
@@ -112,6 +124,17 @@ public class REDatabase {
 			rs.next();
 		}
 		return allItems;
+	}
+	
+	public List<RSSChannel> selectChannelAll() throws SQLException{
+		List<RSSChannel> allChannels = new ArrayList<RSSChannel>();
+		String sql = "SELECT * FROM channels;";
+		ResultSet rs = executeSelectSQL(sql);
+		for(int i = 0; i < rs.getFetchSize(); ++i) {
+			allChannels.add(resultSetToRSSChannel(rs));
+			rs.next();
+		}
+		return allChannels;
 	}
 	
 	public List<RSSItem> selectItemFromChannel(RSSChannel channel) throws SQLException {
