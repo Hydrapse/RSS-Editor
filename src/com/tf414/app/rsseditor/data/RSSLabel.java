@@ -4,10 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RSSLabel {
+	private int id;
 	private String name;
 	private List<RSSChannel> channelList;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public RSSLabel() {
+		channelList = new ArrayList<RSSChannel>();
+	}
+	
+	public RSSLabel(String name) {
+		this.name = name;
 		channelList = new ArrayList<RSSChannel>();
 	}
 	
@@ -33,5 +47,13 @@ public class RSSLabel {
 			return true;
 		else 
 			return false;
+	}
+	
+	public boolean contains(RSSChannel channel) {
+		for(RSSChannel ch: channelList) {
+			if(channel.getLink().equals(ch.getLink()))
+				return true;
+		}
+		return false;
 	}
 }
