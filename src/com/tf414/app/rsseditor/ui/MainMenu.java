@@ -32,20 +32,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
-<<<<<<< HEAD
-import com.tf414.app.rsseditor.model.RSSChannel;
-=======
+import com.tf414.app.rsseditor.data.RSSChannel;
+//import com.tf414.app.rsseditor.model.RSSChannel;
 import com.tf414.app.rsseditor.ui.components.SearchTextField;
->>>>>>> 8f5e4e282db5e0b3b4e34713a71f7802c6c0777d
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.FriTreeNode;
 import com.tf414.app.rsseditor.util.FriTreeRender;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
-<<<<<<< HEAD
-import com.tf414.app.rsseditor.util.SearchTextField;
+//import com.tf414.app.rsseditor.util.SearchTextField;
 import com.tf414.app.rsseditor.util.Tree;
-=======
->>>>>>> 8f5e4e282db5e0b3b4e34713a71f7802c6c0777d
+
 
 public class MainMenu {
 	
@@ -68,9 +64,9 @@ public class MainMenu {
 	private JTextField searchTextField = null; //搜索文本框
 	
 	private List<RSSChannel> channels = new ArrayList<RSSChannel>() {{
-		add(new RSSChannel(1,"百度"));
-		add(new RSSChannel(2,"bilibili"));
-		add(new RSSChannel(3,"搜狐"));
+		add(new RSSChannel("百度"));
+		add(new RSSChannel("bilibili"));
+		add(new RSSChannel("搜狐"));
 	}};
 	
 	private Tree channelTree = null;

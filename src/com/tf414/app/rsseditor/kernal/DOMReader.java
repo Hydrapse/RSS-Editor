@@ -59,7 +59,7 @@ public final class DOMReader {
         	}
 		}
 		RSSItem item = new RSSItem(pchannel,title,description,dateCreated,author,link);
-		System.out.println(item.toString());
+//		System.out.println(item.getChannel());
 //		item.printAll();
 		channel.addItem(item);
 	}
@@ -73,7 +73,7 @@ public final class DOMReader {
 		for(int i=0; i<nl.getLength(); ++i) {
         	Node n = nl.item(i);
         	if(n.getNodeName().contentEquals("title")) {
-        		System.out.print(n.getTextContent());
+//        		System.out.print(n.getTextContent());
         		name = n.getTextContent();
         		break;
         	}
@@ -92,6 +92,7 @@ public final class DOMReader {
         	}
         	itemRead(n,channel);
 		}
+//		System.out.print(channel.getLastBuildDate());
 		return channel;
 	}
 	
@@ -104,7 +105,6 @@ public final class DOMReader {
 //			List<Channel> channelList = new ArrayList<Channel>();
         	Node n = nl.item(i);
         	channelRead(n);
-        	System.out.print("2");
 		}
 	}
 	
@@ -118,7 +118,6 @@ public final class DOMReader {
         for(int i=0; i<nl.getLength(); ++i) {
         	Node n = nl.item(i);
         	rssRead(n);
-        	System.out.print("1");
         }
 	}
 }

@@ -62,14 +62,14 @@ public class RSSChannel {
 	}
 
 	public String getName() {
-		if (name.isEmpty()||name==null) {
+		if (name==null) {
 			return ""; 
 		}
 		return name;
 	}
 	
 	public String getLink() {
-		if (link.isEmpty()||link==null) {
+		if (link==null) {
 			return ""; 
 		}
 		return link;
@@ -80,7 +80,7 @@ public class RSSChannel {
 	}
 
 	public String getLogoPath() {
-		if (logoPath.isEmpty()||logoPath==null) {
+		if (logoPath==null) {
 			return ""; 
 		}
 		return logoPath;
@@ -95,7 +95,7 @@ public class RSSChannel {
 	}
 	
 	public String getDescription() {
-		if (description.isEmpty()||description==null) {
+		if (description==null) {
 			return ""; 
 		}
 		return description;
@@ -110,6 +110,9 @@ public class RSSChannel {
 	}
 	
 	public String getGenerator() {
+		if(generator==null) {
+			return "";
+		}
 		return generator;
 	}
 
@@ -118,6 +121,9 @@ public class RSSChannel {
 	}
 
 	public String getWebMaster() {
+		if(webMaster==null) {
+			return "";
+		}
 		return webMaster;
 	}
 
@@ -126,6 +132,9 @@ public class RSSChannel {
 	}
 
 	public String getLanguage() {
+		if(language == null) {
+			return "";
+		}
 		return language;
 	}
 
