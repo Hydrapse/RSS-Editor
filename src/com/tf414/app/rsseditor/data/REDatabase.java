@@ -357,7 +357,7 @@ public class REDatabase {
 				+ "(\n" 
 				+ "channelID integer PRIMARY KEY,\n"
 				+ "title varchar(50),\n"
-				+ "'description' varchar(2000),\n"
+				+ "description varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "pubDate date,\n"
 				+ "author varchar(255),\n"
@@ -369,7 +369,7 @@ public class REDatabase {
   
 	private REDatabase(String host, int port, String databaseName, String username, String password) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
+		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true", username, password);
 		createChannelTable();
 		createLabelTable();
 		createItemTable();
