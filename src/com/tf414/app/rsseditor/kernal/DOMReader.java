@@ -32,10 +32,9 @@ public final class DOMReader {
 		String description = null;
 		Date dateCreated = null;
 		String author = null;
-		RSSChannel pchannel = channel;
 		String link = null;
 		if(!node.getNodeName().equals("item")) {
-    		return;
+    		return null;
     	}
 		NodeList nl = node.getChildNodes();
 		for(int i=0; i<nl.getLength(); ++i) {
@@ -58,7 +57,7 @@ public final class DOMReader {
         		link = n.getTextContent();
         	}
 		}
-		RSSItem item = new RSSItem(pchannel,title,description,dateCreated,author,link);
+		RSSItem item = new RSSItem(channel,title,description,dateCreated,author,link);
 		return item;
 	}
 	
@@ -108,9 +107,16 @@ public final class DOMReader {
 		if(!node.getNodeName().equals("rss")) {
     		return null;
     	}
+		System.out.println(node.getNodeName());
 		NodeList nl = node.getChildNodes();
-        Node n = nl.item(0);
-        return channelRead(n);
+		for(int i=0; i<nl.getLength(); ++i) {
+			Node n = nl.item(i);
+			RSSChannel c = channelRead(n);
+			if(c!=null) {
+				return c;
+			}
+		}
+		return null;
 	}
 	
 	public static RSSChannel read(String url) throws ParserConfigurationException, IOException, SAXException{ 
