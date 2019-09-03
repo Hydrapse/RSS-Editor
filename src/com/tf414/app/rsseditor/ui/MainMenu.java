@@ -2,51 +2,36 @@ package com.tf414.app.rsseditor.ui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.tf414.app.rsseditor.data.REDatabase;
 import com.tf414.app.rsseditor.data.RSSChannel;
-import com.tf414.app.rsseditor.ui.components.SearchTextField;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.FriTreeNode;
 import com.tf414.app.rsseditor.util.FriTreeRender;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
-import com.tf414.app.rsseditor.ui.components.SearchTextField;
 import com.tf414.app.rsseditor.util.Tree;
+import com.tf414.app.rsseditor.util.TreeLeftListener;
 
 
 public class MainMenu {
 	
-	private JFrame topWindow = null;	//主窗口
+	private REDatabase database = null;
 	
-	private Container container = null; //主容器
+	private JFrame topWindow = null;	//主窗口
 	
 	private JPanel menu = null;			//菜单栏
 	
@@ -87,7 +72,7 @@ public class MainMenu {
 		
 		this.topWindow.setTitle("RSS");
 		
-//		this.topWindow.setResizable(false);
+		this.topWindow.setResizable(false);
 		this.topWindow.setVisible(true);
 		this.topWindow.setLocationRelativeTo(null);	
 	}
@@ -180,13 +165,14 @@ public class MainMenu {
 		channelTree.setCellRenderer(new FriTreeRender());
 
 		
-		channelTree.setFont(new Font(Font.SANS_SERIF, Font.LAYOUT_LEFT_TO_RIGHT, 18));
-		channelTree.setRowHeight(50);
+		channelTree.setFont(new Font(Font.SANS_SERIF, Font.LAYOUT_LEFT_TO_RIGHT, 24));
+		channelTree.setRowHeight(100);
 		channelTree.setToggleClickCount(1);
 		channelTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		channelTree.putClientProperty("JTree.lineStyle", "Horizontal");
 		
-		
+		TreeLeftListener listener = new TreeLeftListener(channelTree,topWindow);
+		this.channelTree.addTreeSelectionListener(listener);
 		this.channelList = new JScrollPane(channelTree);
 		this.channelList.setVisible(true);
 		this.topWindow.add(channelList);
@@ -203,7 +189,16 @@ public class MainMenu {
 		this.expendOrShrink.addActionListener(isExpandTree());
 		
 	}
-
+	
+	
+	public static void main(String[] args) 
+	{
+		MainMenu window = new MainMenu();
+	}
+	
+	
+	
+	
 	//----------------事件监听--------------
 	private ActionListener isShowSearchTextField() {
 		ActionListener isShow = new ActionListener() {
@@ -239,12 +234,6 @@ public class MainMenu {
 		};
 		return isExpand;
 	}
-	
-	
-	//-----------------------------------
-	
-	
-
-
+		
 }
 

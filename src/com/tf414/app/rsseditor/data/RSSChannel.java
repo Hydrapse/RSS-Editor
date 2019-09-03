@@ -87,7 +87,7 @@ public class RSSChannel {
 
 	public String getName() {
 		if (name==null) {
-			return ""; 
+			System.out.println("???"); 
 		}
 		return name;
 	}

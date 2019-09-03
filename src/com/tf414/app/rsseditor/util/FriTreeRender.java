@@ -1,7 +1,9 @@
 package com.tf414.app.rsseditor.util;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -22,6 +24,9 @@ public class FriTreeRender extends JLabel implements TreeCellRenderer {
         expanded,boolean leaf, int row, boolean hasFocus) {
 		
 		FriTreeNode f = (FriTreeNode) value;//把value转换为节点
+		
+		this.setPreferredSize(new Dimension(150,20));
+		
 	
 	if (leaf && f.getParent() != tree.getModel().getRoot()) {//节点需要不为根节点，和根节点的孩子节点
 
@@ -31,19 +36,18 @@ public class FriTreeRender extends JLabel implements TreeCellRenderer {
 
 		/**************************** 设置JLable的图片 *****************/
 		// 得到此图标的 Image,然后创建此图像的缩放版本。
-		 Image img = f.getImg().getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		 Image img = f.getImg().getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 	     setIcon(new ImageIcon(img));
 
 	    // 设置JLable的图片
 	
-	     
+	     this.setFont(new Font("Serif",Font.PLAIN,24));
 	     setIconTextGap(15);// 设置JLable的图片与文字之间的距离	
 	     
 	 } else { // 非叶子节点的文字为节点的ID
 		 
 		setText(f.getTitle());// 设置JLable的文字
-		
-		
+		this.setFont(new Font("Serif",Font.PLAIN,18));
 		if (expanded)//节点展开
 			
 		   setIcon(Arrow_down);

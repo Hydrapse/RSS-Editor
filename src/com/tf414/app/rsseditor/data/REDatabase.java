@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class REDatabase {
 	public static void main(String[] args) {
@@ -71,7 +74,8 @@ public class REDatabase {
 	private ResultSet executeSelectSQL(String sql) throws SQLException {
 		Statement s = con.createStatement();
 		ResultSet r = s.executeQuery(sql);
-		s.close();
+		r.first();
+//		s.close();
 		return r;
 	}
 	
@@ -82,9 +86,28 @@ public class REDatabase {
 		if(rs.getFetchSize() == 0) {
 			throw new IllegalArgumentException("No channel use id " + channelID);
 		}
+		rs.first();
 		RSSChannel channel = new RSSChannel(rs1.getString("name"), rs1.getString("link"), rs1.getString("logoPath"), rs1.getString("description"), rs1.getString("generator"), rs1.getString("webMaster"),
 				rs1.getString("language"), rs1.getDate("lastBuildDate"));
 		return new RSSItem(channel, rs.getString("title"), rs.getString("description"), rs.getDate("dateCreated"), rs.getString("author"), rs.getString("link"));
+	}
+	
+	private RSSChannel resultSetToRSSChannel(ResultSet rs) throws SQLException {
+		int channelID = rs.getInt("channelID");
+		RSSChannel channel = new RSSChannel(rs.getString("name"), rs.getString("link"), rs.getString("logoPath"), rs.getString("description"), rs.getString("generator"), rs.getString("webMaster"),
+				rs.getString("language"), rs.getDate("lastBuildDate"));
+		 for(RSSItem item: selectItemFromChannel(channel)) {
+			 channel.addItem(item);
+		 }
+		 channel.setId(channelID);
+		return channel;
+	}
+	
+	private int getChannelIDByName(String name) throws SQLException {
+		String sql = "SELECT channelID FROM channels WHERE name = '" + name + "';";
+		ResultSet rs = executeSelectSQL(sql);
+		rs.first();
+		return rs.getInt("channelID");
 	}
 	
 	public RSSChannel selectChannelByChannelID(int channelID) throws SQLException {
@@ -93,8 +116,10 @@ public class REDatabase {
 		if(rs.getFetchSize() == 0) {
 			throw new IllegalArgumentException("No channel use id " + channelID);
 		}
+		rs.first();
 		 RSSChannel channel = new RSSChannel(rs.getString("name"), rs.getString("link"), rs.getString("logoPath"), rs.getString("description"), rs.getString("generator"), rs.getString("webMaster"),
 				rs.getString("language"), rs.getDate("lastBuildDate"));
+		 channel.setId(channelID);
 		 for(RSSItem item: selectItemFromChannel(channel)) {
 			 channel.addItem(item);
 		 }
@@ -105,11 +130,39 @@ public class REDatabase {
 		List<RSSItem> allItems = new ArrayList<RSSItem>();
 		String sql = "SELECT * FROM items;";
 		ResultSet rs = executeSelectSQL(sql);
+		rs.first();
 		for(int i = 0; i < rs.getFetchSize(); ++i) {
 			allItems.add(resultSetToRSSItem(rs));
 			rs.next();
 		}
 		return allItems;
+	}
+	
+	public List<RSSChannel> selectChannelAll() throws SQLException{
+		List<RSSChannel> allChannels = new ArrayList<RSSChannel>();
+		String sql = "SELECT * FROM channels;";
+		ResultSet rs = executeSelectSQL(sql);
+		for(int i = 0; i < rs.getFetchSize(); ++i) {
+			allChannels.add(resultSetToRSSChannel(rs));
+			rs.next();
+		}
+		return allChannels;
+	}
+	
+	public List<RSSLabel> selectLabelAll() throws SQLException{
+		Map<String, RSSLabel> maps = new HashMap<String, RSSLabel>();
+		String sql = "SELECT * FROM labels;";
+		ResultSet rs = executeSelectSQL(sql);
+		for(int i = 0; i < rs.getFetchSize(); ++i) {
+			String name = rs.getString("name");
+			if(maps.containsKey(name)) {
+				maps.get(name).addChannel(selectChannelByChannelID(rs.getInt("channelID")));
+			}else {
+				maps.put(name, new RSSLabel(name));
+			}
+			rs.next();
+		}
+		return new ArrayList<RSSLabel>(maps.values());
 	}
 	
 	public List<RSSItem> selectItemFromChannel(RSSChannel channel) throws SQLException {
@@ -124,43 +177,46 @@ public class REDatabase {
 	}
 
 	public void insertItem(RSSItem item) throws SQLException {
-			
+		if(item == null) return;
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			int channelID = getChannelIDByName(item.getChannel().getName());
 			String sql="INSERT INTO items VALUES ("
-					+ item.getChannel().getId()+","
-					+ item.getTitle()+","
-					+ item.getDescription()+","
-					+ item.getLink()+","
-					+ item.getDateCreated()+","
-					+ item.getAuthor()+","
-					+ item.hasRead()+","
+					+ channelID +","
+					+ "'" +  item.getTitle()+"',"
+					+ "'" +  item.getDescription()+"',"
+					+ "'" +  item.getLink()+"',"
+					+ "'" +  sdf.format(item.getDateCreated())+"',"
+					+ "'" +  item.getAuthor()+"',"
+					+ (item.hasRead()?1:0)
 					+")";
+			System.out.println(sql);
 			executeInsertSQL(sql);
 	}
 
 	public void insertChannel(RSSChannel channel) throws SQLException {
-		String sql="INSERT INTO channnels VALUES ("
-				+ "uuid(),"
-				+ channel.getName()+","
-				+ channel.getDescription()+","
-				+ channel.getLink()+","
-				+ channel.getGenerator()+","
-				+ channel.getWebMaster()+","
-				+ channel.getLogoPath()+","
-				+ channel.getLanguage()+","
-				+ channel.getLastBuildDate() + ","
-				+ channel.isLike() +","
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String sql="INSERT INTO channels ("
+				+ "name,description,link,generator,webMaster,logoPath,language,lastBuildDate,isLike)"
+				+ " VALUES ("
+				+ "'" + channel.getName()+"',"
+				+ "'" + channel.getDescription()+"',"
+				+ "'" + channel.getLink()+"',"
+				+ "'" + channel.getGenerator()+"',"
+				+ "'" + channel.getWebMaster()+"',"
+				+ "'" + channel.getLogoPath()+"',"
+				+ "'" + channel.getLanguage()+"',"
+				+ "'" + sdf.format(channel.getLastBuildDate()) + "',"
+				+ (channel.isLike()?1:0)
 				+")";
+		System.out.println(sql);
 		executeInsertSQL(sql);
 	}
 
-	public void insertLabel(RSSLabel label, RSSChannel channel) throws SQLException {
-		String select = "SELECT channels * WHERE name='"+channel.getName()+"'";
-		
-		executeSelectSQL(select);
-		
+	public void insertLabel(String label, RSSChannel channel) throws SQLException {
+		int channelID = getChannelIDByName(channel.getName());
 		String sql="INSERT INTO labels VALUES ("
-				+ label.getName()+","
-				+ channel.getName()
+				+ "'" + label + "',"
+				+ channelID
 				+")";
 		executeInsertSQL(sql);
 	}
@@ -284,7 +340,6 @@ public class REDatabase {
 	public void createChannelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
 				+ "(\n"
-				+ "channelID integer NOT NULL PRIMARY KEY,\n"
 				+ "name varchar(50) NOT NULL,\n"
 				+ "description varchar(2000),\n"
 				+ "link varchar(255),\n"
@@ -293,7 +348,8 @@ public class REDatabase {
 				+ "logoPath varchar(255),\n"
 				+ "language varchar(10),\n"
 				+ "lastBuildDate date,\n"
-				+ "isLike tinyint\n"
+				+ "isLike tinyint,\n"
+				+ "channelID integer NOT NULL PRIMARY KEY AUTO_INCREMENT\n"
 				+ ");";
 		executeCreateSQL(sql);
 	}
@@ -311,21 +367,22 @@ public class REDatabase {
 	public void createItemTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS items\n"
 				+ "(\n" 
-				+ "channelID integer PRIMARY KEY,\n"
-				+ "title varchar(50),\n"
-				+ "'description' varchar(2000),\n"
+				+ "channelID integer NOT NULL,\n"
+				+ "title varchar(50) NOT NULL,\n"
+				+ "description varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "pubDate date,\n"
 				+ "author varchar(255),\n"
 				+ "hasRead tinyint,\n"
-				+ "FOREIGN KEY (channelID) REFERENCES channels(channelID)\n"
+				+ "FOREIGN KEY (channelID) REFERENCES channels(channelID),\n"
+				+ "PRIMARY KEY (channelID, title)"
 				+ ");";
 		executeCreateSQL(sql);
 	}
   
 	private REDatabase(String host, int port, String databaseName, String username, String password) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
+		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true", username, password);
 		createChannelTable();
 		createLabelTable();
 		createItemTable();
