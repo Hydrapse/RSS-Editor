@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class RSSChannel {
+	private int id;
 	private String name;
 	private String link;
 	private String logoPath;
@@ -25,6 +26,21 @@ public class RSSChannel {
 	public RSSChannel(String name, String link, String logoPath, String description, String generator, String webMaster,
 			String  language, Date lastBuildDate) {
 		super();
+		this.name = name;
+		this.link = link;
+		this.logoPath = logoPath;
+		this.description = description;
+		this.generator = generator;
+		this.webMaster = webMaster;
+		this.language = language;
+		this.lastBuildDate = lastBuildDate;
+		items = new ArrayList<RSSItem>();
+	}
+	
+	public RSSChannel(int id, String name, String link, String logoPath, String description, String generator, String webMaster,
+			String  language, Date lastBuildDate) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.link = link;
 		this.logoPath = logoPath;
@@ -59,6 +75,14 @@ public class RSSChannel {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {

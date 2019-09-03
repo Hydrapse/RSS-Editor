@@ -134,7 +134,7 @@ public class RSSItem {
 	@Override
 	public String toString() {
 		return "RSSItem [title=" + title + ", description=" + description + ", dateCreated=" + dateCreated + ", author="
-				+ author + ", channel=" + channel + ", link=" + link + ", hasRead=" + hasRead + "]";
+				+ author + ", link=" + link + ", hasRead=" + hasRead + "]";
 	}
 	//there is some mistake in toString
 	/**

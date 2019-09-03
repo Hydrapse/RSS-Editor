@@ -204,16 +204,7 @@ public class MainMenu {
 		this.expendOrShrink.addActionListener(isExpandTree());
 		
 	}
-	
-	
-	public static void main(String[] args) 
-	{
-		MainMenu window = new MainMenu();
-	}
-	
-	
-	
-	
+
 	//----------------事件监听--------------
 	private ActionListener isShowSearchTextField() {
 		ActionListener isShow = new ActionListener() {
