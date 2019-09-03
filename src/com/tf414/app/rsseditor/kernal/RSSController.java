@@ -1,6 +1,7 @@
 package com.tf414.app.rsseditor.kernal;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tf414.app.rsseditor.data.REDatabase;
@@ -27,6 +28,7 @@ public class RSSController {
 	private RSSController() {
 		
 	}
+
 	
 	public RSSLabel getAllLabel() {
 		RSSLabel label = new RSSLabel("ALL");
@@ -47,7 +49,7 @@ public class RSSController {
 		return null;
 	}
 	
-	public void addRSSChannel(String label, String url) {
+	public RSSChannel addRSSChannel(String label, String url) {
 		try {
 			RSSChannel c = DOMReader.read(url);
 			REDatabase.getInstance().insertChannel(c);
@@ -56,12 +58,14 @@ public class RSSController {
 			}
 			REDatabase.getInstance().insertChannel(c);
 			REDatabase.getInstance().insertLabel(label, c);
+			return c;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
-	public void addRSSChannel(String url) {
+	public RSSChannel addRSSChannel(String url) {
 		try {
 			RSSChannel c = DOMReader.read(url);
 			REDatabase.getInstance().insertChannel(c);
@@ -69,8 +73,10 @@ public class RSSController {
 				REDatabase.getInstance().insertItem(item);
 			}
 			REDatabase.getInstance().insertChannel(c);
+			return c;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 }
