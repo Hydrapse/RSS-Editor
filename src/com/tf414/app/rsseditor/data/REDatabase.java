@@ -137,6 +137,22 @@ public class REDatabase {
 		return allChannels;
 	}
 	
+	public List<RSSLabel> selectLabelAll() throws SQLException{
+		Map<String, RSSLabel> maps = new HashMap<String, RSSLabel>();
+		String sql = "SELECT * FROM labels;";
+		ResultSet rs = executeSelectSQL(sql);
+		for(int i = 0; i < rs.getFetchSize(); ++i) {
+			String name = rs.getString("name");
+			if(maps.containsKey(name)) {
+				maps.get(name).addChannel(selectChannelByChannelID(rs.getInt("channelID")));
+			}else {
+				maps.put(name, new RSSLabel(name));
+			}
+			rs.next();
+		}
+		return new ArrayList<RSSLabel>(maps.values());
+	}
+	
 	public List<RSSItem> selectItemFromChannel(RSSChannel channel) throws SQLException {
 		List<RSSItem> items = new ArrayList<RSSItem>();
 		String sql = "SELECT * FROM items WHERE channelID=" + channel.getId() + ";";

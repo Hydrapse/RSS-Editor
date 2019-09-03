@@ -1,6 +1,7 @@
 package com.tf414.app.rsseditor.kernal;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.tf414.app.rsseditor.data.REDatabase;
 import com.tf414.app.rsseditor.data.RSSLabel;
@@ -35,5 +36,13 @@ public class RSSController {
 		return label;
 	}
 	
-	
+	public List<RSSLabel> getLabels() {
+		RSSLabel label = new RSSLabel("ALL");
+		try {
+			label.setChannelList(REDatabase.getInstance().selectChannelAll());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return label;
+	}
 }
