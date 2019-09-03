@@ -37,12 +37,11 @@ public class RSSController {
 	}
 	
 	public List<RSSLabel> getLabels() {
-		RSSLabel label = new RSSLabel("ALL");
 		try {
-			label.setChannelList(REDatabase.getInstance().selectChannelAll());
+			return REDatabase.getInstance().selectLabelAll();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return label;
+		return null;
 	}
 }
