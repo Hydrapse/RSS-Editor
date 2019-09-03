@@ -60,7 +60,7 @@ public final class DOMReader {
 		}
 		RSSItem item = new RSSItem(pchannel,title,description,dateCreated,author,link);
 //		System.out.println(item.getChannel());
-//		item.printAll();
+		item.printAll();
 		channel.addItem(item);
 	}
 	
