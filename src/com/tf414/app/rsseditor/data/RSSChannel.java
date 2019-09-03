@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class RSSChannel {
+	private int id;
 	private String name;
 	private String link;
 	private String logoPath;
@@ -25,6 +26,21 @@ public class RSSChannel {
 	public RSSChannel(String name, String link, String logoPath, String description, String generator, String webMaster,
 			String  language, Date lastBuildDate) {
 		super();
+		this.name = name;
+		this.link = link;
+		this.logoPath = logoPath;
+		this.description = description;
+		this.generator = generator;
+		this.webMaster = webMaster;
+		this.language = language;
+		this.lastBuildDate = lastBuildDate;
+		items = new ArrayList<RSSItem>();
+	}
+	
+	public RSSChannel(int id, String name, String link, String logoPath, String description, String generator, String webMaster,
+			String  language, Date lastBuildDate) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.link = link;
 		this.logoPath = logoPath;
@@ -60,16 +76,24 @@ public class RSSChannel {
 			return false;
 		return true;
 	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
-		if (name.isEmpty()||name==null) {
+		if (name==null) {
 			return ""; 
 		}
 		return name;
 	}
 	
 	public String getLink() {
-		if (link.isEmpty()||link==null) {
+		if (link==null) {
 			return ""; 
 		}
 		return link;
@@ -80,7 +104,7 @@ public class RSSChannel {
 	}
 
 	public String getLogoPath() {
-		if (logoPath.isEmpty()||logoPath==null) {
+		if (logoPath==null) {
 			return ""; 
 		}
 		return logoPath;
@@ -95,7 +119,7 @@ public class RSSChannel {
 	}
 	
 	public String getDescription() {
-		if (description.isEmpty()||description==null) {
+		if (description==null) {
 			return ""; 
 		}
 		return description;
@@ -110,6 +134,9 @@ public class RSSChannel {
 	}
 	
 	public String getGenerator() {
+		if(generator==null) {
+			return "";
+		}
 		return generator;
 	}
 
@@ -118,6 +145,9 @@ public class RSSChannel {
 	}
 
 	public String getWebMaster() {
+		if(webMaster==null) {
+			return "";
+		}
 		return webMaster;
 	}
 
@@ -126,6 +156,9 @@ public class RSSChannel {
 	}
 
 	public String getLanguage() {
+		if(language == null) {
+			return "";
+		}
 		return language;
 	}
 
