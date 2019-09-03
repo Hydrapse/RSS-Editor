@@ -1,4 +1,5 @@
 package com.tf414.app.rsseditor.util;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -19,17 +20,20 @@ public class FriTreeNode  implements TreeNode{
 	private String title;//第一行文字（显示名字）
 	
 	private String text;//第二行文字（显示签名）
+	
+	private int channelID=0;
 
 	private ArrayList<TreeNode> children=null;//孩子节点
 	private TreeNode parent;//父亲节点
 	static public final Enumeration<TreeNode> EMPTY_ENUMERATION
     = Collections.emptyEnumeration();
 	
-	public FriTreeNode(String title) {	
-		this.title=title;		
-	}
-	public FriTreeNode() {	
-	
+//	public FriTreeNode(String title) {	
+//		this.title=title;		
+//	}
+	public FriTreeNode(String title,int channelID) {	
+		this.title=title;
+		this.channelID=channelID;
 	}
 	public FriTreeNode(String name,String text,ImageIcon img) {	
 		this.title=title;
@@ -69,7 +73,6 @@ public class FriTreeNode  implements TreeNode{
 	 */
 	public void setImg(ImageIcon img) {
 		this.img = img;
-		System.out.println(img.getDescription());
 	}
 	
 	/**
@@ -86,6 +89,13 @@ public class FriTreeNode  implements TreeNode{
 		this.text = text;
 	}
 
+	public int getChannelID() {
+		return this.channelID;
+	}
+	public void setChannelID(int id) {
+		this.channelID=id;
+	}
+	
 	public void addchild(FriTreeNode aChild){
 		
 		if(children==null){

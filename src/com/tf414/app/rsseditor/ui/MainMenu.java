@@ -33,13 +33,12 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.tf414.app.rsseditor.data.RSSChannel;
-//import com.tf414.app.rsseditor.model.RSSChannel;
 import com.tf414.app.rsseditor.ui.components.SearchTextField;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.FriTreeNode;
 import com.tf414.app.rsseditor.util.FriTreeRender;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
-//import com.tf414.app.rsseditor.util.SearchTextField;
+import com.tf414.app.rsseditor.ui.components.SearchTextField;
 import com.tf414.app.rsseditor.util.Tree;
 
 
@@ -164,13 +163,13 @@ public class MainMenu {
 		
 	
 		
-		FriTreeNode rootNode = new FriTreeNode();
+		FriTreeNode rootNode = new FriTreeNode("root",0);
 		for(int i=0 ; i<channels.size();++i) {
-			FriTreeNode chiNode = new FriTreeNode(channels.get(i).getName());
+			FriTreeNode chiNode = new FriTreeNode(channels.get(i).getName(),i);
 			 for(int j=0 ; j<30 ; ++j) {
-				 FriTreeNode chiNode1 =  new FriTreeNode("j="+j);
+				 FriTreeNode chiNode1 =  new FriTreeNode("j="+j,j);
+				 chiNode1.setImg(new ImageIcon("./icon/expand.jpg"));
 				 chiNode.addchild(chiNode1);
-				 chiNode.setImg(new ImageIcon("./icon/expand.jpg"));
 			 }
 			 rootNode.addchild(chiNode);
 		}

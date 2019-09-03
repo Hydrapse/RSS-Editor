@@ -7,6 +7,9 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/guojianglong/OneDrive - csu.edu.cn/Projects/Java/RSS-Editor/mysql-connector-java-8.0.17.jar"/>
+	<classpathentry kind="lib" path="/Users/guojianglong/OneDrive - csu.edu.cn/Projects/Java/RSS-Editor/mysql-connector-java-8.0.17
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/The-SQL"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

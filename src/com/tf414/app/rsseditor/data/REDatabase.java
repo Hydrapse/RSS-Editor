@@ -3,6 +3,7 @@ package com.tf414.app.rsseditor.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class REDatabase {
 	private static final int PORT = 3306;
 	private static final String DATABASE_NAME = "RSSEditor";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "g123456.0";
+	private static final String PASSWORD = "123456";
 
 	public static boolean isInit = false;
 	private static REDatabase instance;
@@ -234,7 +235,53 @@ public class REDatabase {
 		executeRemoveSQL(sql);
 	}
 
-	private void createChannelTable() throws SQLException {
+	public List selectLikeChannel() throws SQLException{
+		String sql = "SELECT * FROM channels WHERE isLike = 1";
+		ResultSet result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	
+	public List selectChannelItems(int channelID) throws SQLException{
+		String sql="SELECT * FROM items WHERE channelID="+channelID;
+		ResultSet result=executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	public List selectHasRead() throws SQLException{
+		String sql="SELECT * FROM items WHERE hasRead=1";
+		ResultSet result=null;
+		result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	
+	public List resultSetToList(ResultSet result) throws SQLException {
+		ResultSetMetaData metaData=null;
+		int row =0;
+		metaData = result.getMetaData();
+		row = metaData.getColumnCount();
+		
+		List list=new ArrayList();
+		while (result.next()) {
+				Map rowData = new HashMap();
+				for (int i = 1; i <= row; i++) {
+					rowData.put(metaData.getColumnName(i), result.getObject(i));//获取键名及值
+				}
+				list.add(rowData);
+			}
+		return list;
+	}
+	public List selectAllChannel() throws SQLException {
+		String sql = "SELECT * FROM channels";
+		ResultSet result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	
+	public List selectItem(int channelID,String title) throws SQLException {
+		String sql="SELECT * FROM items WHERE channelID="+channelID+",title='"+title+"'";
+		ResultSet result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	
+	public void createChannelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
 				+ "(\n"
 				+ "channelID integer NOT NULL PRIMARY KEY,\n"
@@ -251,7 +298,7 @@ public class REDatabase {
 		executeCreateSQL(sql);
 	}
 
-	private void createLabelTable() throws SQLException {
+	public void createLabelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS labels\n"
 				+ "(\n"
 				+ "label varchar(50) NOT NULL,\n"
@@ -261,12 +308,12 @@ public class REDatabase {
 		executeCreateSQL(sql);
 	}
 
-	private void createItemTable() throws SQLException {
+	public void createItemTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS items\n"
 				+ "(\n" 
 				+ "channelID integer PRIMARY KEY,\n"
 				+ "title varchar(50),\n"
-				+ "description varchar(2000),\n"
+				+ "'description' varchar(2000),\n"
 				+ "link varchar(255),\n"
 				+ "pubDate date,\n"
 				+ "author varchar(255),\n"
@@ -275,7 +322,7 @@ public class REDatabase {
 				+ ");";
 		executeCreateSQL(sql);
 	}
-
+  
 	private REDatabase(String host, int port, String databaseName, String username, String password) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 		con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);

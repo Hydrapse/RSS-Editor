@@ -1,4 +1,5 @@
 package com.tf414.app.rsseditor.util;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -14,9 +15,6 @@ public class FriTreeRender extends JLabel implements TreeCellRenderer {
 	ImageIcon Arrow_right = new ImageIcon(/*"./icon/expend.jpg"*/);//节点折叠时的图片
 	
 	ImageIcon Arrow_down = new ImageIcon(/*"./icon/shrink.jpg"*/);//节点展开式的图片
-//	ImageIcon Arrow_right = ImageAdaptive.createAutoAdjustIcon("./icon/expend.jpg");//节点折叠时的图片
-//	
-//	ImageIcon Arrow_down = ImageAdaptive.createAutoAdjustIcon("./icon/shrink.jpg");//节点展开式的图片
 	
 	@Override
 	
@@ -33,14 +31,9 @@ public class FriTreeRender extends JLabel implements TreeCellRenderer {
 
 		/**************************** 设置JLable的图片 *****************/
 		// 得到此图标的 Image,然后创建此图像的缩放版本。
-	     
-		try{
-			Image img = f.getImg().getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-			setIcon(new ImageIcon(img));
-		}
-		catch(Exception e){
-			setIcon(new ImageIcon(new ImageIcon("./icon/QQ.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
-		}
+		 Image img = f.getImg().getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+	     setIcon(new ImageIcon(img));
+
 	    // 设置JLable的图片
 	
 	     
