@@ -3,8 +3,13 @@ package com.tf414.app.rsseditor.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class REDatabase {
 	private static final String HOST = "127.0.0.1";
@@ -84,7 +89,7 @@ public class REDatabase {
 	public void insertChannel(RSSChannel channel) throws SQLException {
 		String sql="INSERT INTO channnels VALUES ("
 				+ "uuid(),"
-				+ channel.getTitle()+","
+				+ channel.getName()+","
 				+ channel.getDescription()+","
 				+ channel.getLink()+","
 				+ channel.getGenerator()+","
@@ -92,7 +97,7 @@ public class REDatabase {
 				+ channel.getLogoPath()+","
 				+ channel.getLanguage()+","
 				+ channel.getLastBuildDate() + ","
-				+ channel.isLink() +","
+				+ channel.isLike() +","
 				+")";
 		executeInsertSQL(sql);
 	}
@@ -132,17 +137,17 @@ public class REDatabase {
 					+ "logoPath = '"+channel.getLogoPath()+"',"
 					+ "language = '"+channel.getLanguage()+"',"
 					+ "lastBuildDate = "+channel.getLastBuildDate()+","
-					+ "isLike = "+channel.isLink()+","
+					+ "isLike = "+channel.isLike()+","
 					+" WHERE name ='"+channel.getName()+"'";
 			executeUpdateSQL(sql);
 	}
 
 	public void updateLabel(RSSLabel label) throws SQLException {
-		ArrayList<RSSChannel> list=label.getChannelList();
+		List<RSSChannel> list= label.getChannelList();
 		for(int i=0 ; i<list.size() ; ++i) {
 			RSSChannel channel = list.get(i);
 			String select = "SELECT channelID FROM channels WHERE name='"+channel.getName()+"'";
-			int channelID = executeSelectSQL(select);
+			int channelID = (int) executeSelectSQL(select).getObject(0);
 			String sql="UPDATE labels SET "
 				+ "label ='"+label.getName()+"' "
 				+ "WHERE channelID="+channelID;
@@ -158,7 +163,7 @@ public class REDatabase {
 
 	public void removeChannel(String channel) throws SQLException {
 		String selectChannelID = "SELECT channelID FROM channels WHERE name='"+channel+"'";
-		int channelID=executeSelectSQL(selectChannelID);
+		int channelID=(int)executeSelectSQL(selectChannelID).getObject(0);
 		String delItem = "DELETE FROM items WHERE in channelID="+channelID;
 		String delLab = "DELETE FROM labels WHERE in channelID="+channelID;
 		String delCha="DELETE FROM channels WHERE name='"+channel+"'";
@@ -173,6 +178,57 @@ public class REDatabase {
 		executeRemoveSQL(sql);
 	}
 
+	public List selectLikeChannel() throws SQLException{
+		String sql = "SELECT * FROM channels WHERE isLike = 1";
+		ResultSet result = executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	
+	public List selectChannelItems(int channelID) throws SQLException{
+		String sql="SELECT * FROM items WHERE channelID="+channelID;
+		ResultSet result=executeSelectSQL(sql);
+		return resultSetToList(result);
+	}
+	public List selectHasRead(){
+		String sql="SELECT * FROM items WHERE hasRead=1";
+		ResultSet result=null;
+		try {
+			result = executeSelectSQL(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultSetToList(result);
+	}
+	
+	public List resultSetToList(ResultSet result) {
+		ResultSetMetaData metaData=null;
+		int row =0;
+		try {
+			metaData = result.getMetaData();
+			 row = metaData.getColumnCount();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List list=new ArrayList();
+		try {
+			while (result.next()) {
+				Map rowData = new HashMap();
+				for (int i = 1; i <= row; i++) {
+					rowData.put(metaData.getColumnName(i), result.getObject(i));//获取键名及值
+				}
+				list.add(rowData);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
 	private void createChannelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
 				+ "(\n"
