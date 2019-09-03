@@ -15,12 +15,15 @@ import java.awt.Panel;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -28,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -37,6 +41,7 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 
 import com.tf414.app.rsseditor.data.RSSChannel;
 import com.tf414.app.rsseditor.data.RSSItem;
+import com.tf414.app.rsseditor.kernal.RSSController;
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
 import com.tf414.app.rsseditor.util.TimeConv;
@@ -50,6 +55,7 @@ public class ReadingWindow extends JFrame{
 	private JFrame frame;
 	private JPanel contentPane;
     private Point pressedPoint; 
+    int thisItem = -1;
 	/**
 	 * Launch the application.
 	 */
@@ -78,11 +84,38 @@ public class ReadingWindow extends JFrame{
 	 * @throws IOException 
 	 */
 	public ReadingWindow(RSSItem infoItem) throws IOException {
+		String channelName =null;
+		RSSChannel pchannel =null;
+		List<RSSItem> itemList =null;
+//		try {
+//			channelName = infoItem.getChannel().getName();
+//			pchannel = RSSController.getRSSChannel(channelName);
+//			itemList = pchannel.getItems();
+//		}
+//		catch (Exception e){
+//			System.out.print("error on take itemList from Db");
+//		}
+//		
+//		for(int i = 0 ; i < itemList.size()-1 ; ++i) {
+//			if(itemList.get(i).getTitle().equals(infoItem.getTitle())) {
+//				thisItem = i;
+//			}
+//		}
 		
+		showTheInfo(infoItem,itemList);
 		initialize();
 		setUndecorated(true); 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);     
 //        setBounds(100, 100, 800, 560);  
+
+  
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	
+	public void showTheInfo(RSSItem infoItem,List<RSSItem> itemList) throws IOException {
 		int[] geo = AutoadaptWindowSize.getReadingWindowGeometry();
 		int dx = geo[0];
 		int dy = geo[1];
@@ -131,6 +164,23 @@ public class ReadingWindow extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				//like
+				ImageIcon likeIcon2;
+				if(infoItem.getChannel().isLike()) {
+					//db
+					//end db
+					infoItem.getChannel().setLike(false);
+					likeIcon2 = ImageAdaptive.createAutoAdjustIcon("./icon/4-04.png", false);
+					buttonLike.setIcon(likeIcon2);
+				}
+				else {
+					//db
+					//end db
+					infoItem.getChannel().setLike(true);
+					likeIcon2 = ImageAdaptive.createAutoAdjustIcon("./icon/5-05.png", false);
+					buttonLike.setIcon(likeIcon2);
+					
+				}
+				
 			}
 		});
         buttonLike.setFocusPainted(false);
@@ -154,8 +204,19 @@ public class ReadingWindow extends JFrame{
         buttonBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				//back
+				if(thisItem<itemList.size() && thisItem>0) {
+					--thisItem;
+					try {
+						showTheInfo(infoItem, itemList);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "There is not message on back ", "WORING", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
         buttonBack.setFocusPainted(false);
@@ -178,6 +239,19 @@ public class ReadingWindow extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				//front
+				if(thisItem<itemList.size()-1 && thisItem>=0) {
+					--thisItem;
+					try {
+						showTheInfo(infoItem, itemList);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "There is not message on back ", "WORING", JOptionPane.ERROR_MESSAGE);
+				}
+				
 			}
 		});
         buttonFront.setBorder(null);
@@ -303,12 +377,8 @@ public class ReadingWindow extends JFrame{
         JSeparator s = new JSeparator(SwingConstants.CENTER);
         s.setBounds(45, TitlePanelHight-10, width/11*10, 50);
         TitlePanel.add(s);
-  
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);

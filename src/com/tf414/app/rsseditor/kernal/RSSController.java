@@ -88,7 +88,7 @@ public class RSSController {
 		}
 	}
 	
-	public RSSChannel getRSSChannel(String name) {
+	public static RSSChannel getRSSChannel(String name) {
 		try {
 			return REDatabase.getInstance().selectChannelByChannelID(REDatabase.getInstance().getChannelIDByName(name));
 		} catch (SQLException e) {
