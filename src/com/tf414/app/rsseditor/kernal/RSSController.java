@@ -80,6 +80,14 @@ public class RSSController {
 		return null;
 	}
 	
+	public void removeRSSChannel(String name) {
+		try {
+			REDatabase.getInstance().removeChannel(name);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public RSSChannel getRSSChannel(String name) {
 		try {
 			return REDatabase.getInstance().selectChannelByChannelID(REDatabase.getInstance().getChannelIDByName(name));
