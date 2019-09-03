@@ -103,7 +103,7 @@ public class REDatabase {
 		return channel;
 	}
 	
-	private int getChannelIDByName(String name) throws SQLException {
+	public int getChannelIDByName(String name) throws SQLException {
 		String sql = "SELECT channelID FROM channels WHERE name = '" + name + "';";
 		ResultSet rs = executeSelectSQL(sql);
 		rs.first();
