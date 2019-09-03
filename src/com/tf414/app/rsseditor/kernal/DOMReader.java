@@ -90,6 +90,18 @@ public final class DOMReader {
         	else if(n.getNodeName().contentEquals("image")) {
         		channel.setLogoPath(n.getTextContent());
         	}
+        	else if(n.getNodeName().contentEquals("generator")) {
+        		channel.setGenerator(n.getTextContent());
+        	}
+        	else if(n.getNodeName().contentEquals("webMaster")) {
+        		channel.setWebMaster(n.getTextContent());
+        	}
+        	else if(n.getNodeName().contentEquals("lastBuildDate")) {
+        		channel.setLastBuildDate(TimeConv.strToDate(n.getTextContent()));
+        	}
+        	else if(n.getNodeName().contentEquals("language")) {
+        		channel.setLanguage(n.getTextContent());
+        	}
         	itemRead(n,channel);
 		}
 //		System.out.print(channel.getLastBuildDate());
