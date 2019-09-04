@@ -25,13 +25,13 @@ public class FriTreeRender extends JLabel implements TreeCellRenderer {
 		
 		FriTreeNode f = (FriTreeNode) value;//把value转换为节点
 		
-		this.setPreferredSize(new Dimension(150,20));
+		this.setPreferredSize(new Dimension(AutoadaptWindowSize.getMainMenuGeometry()[2],20));
 		
 	
 	if (leaf && f.getParent() != tree.getModel().getRoot()) {//节点需要不为根节点，和根节点的孩子节点
 
 		/***************** 设置JLable的文字 ****************************/
-		String text = "<html>" + f.getTitle() + "<br/>" + f.getText() + " <html/>";
+		String text = "<html>" + f.getTitle() + "<br>" + f.getDate() + "</html>";
 		setText(text);// 设置JLable的文字
 
 		/**************************** 设置JLable的图片 *****************/
@@ -41,7 +41,7 @@ public class FriTreeRender extends JLabel implements TreeCellRenderer {
 
 	    // 设置JLable的图片
 	
-	     this.setFont(new Font("Serif",Font.PLAIN,24));
+	     this.setFont(new Font("Serif",Font.PLAIN,20));
 	     setIconTextGap(15);// 设置JLable的图片与文字之间的距离	
 	     
 	 } else { // 非叶子节点的文字为节点的ID

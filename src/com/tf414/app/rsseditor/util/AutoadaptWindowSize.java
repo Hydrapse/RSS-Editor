@@ -43,5 +43,17 @@ public final class AutoadaptWindowSize {
 		int y = (rect.height - height) / 2;
 
 		return new int[] { x, y, width, height };
+		
 	}
+	
+	public static int[] getPreferencesGeometry() {
+		int width = (int) (rect.width / 3.76 / WIDTH_PROPORTION);
+		int height = (int) (width * 1.1) + STATUS_BAR_HEIGHT;
+		int x = (rect.width - width) / 2;
+		int y = (rect.height - height) / 2;
+
+		return new int[] { x, y, width, height };
+		
+	}
+
 }

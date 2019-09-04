@@ -161,8 +161,13 @@ public class ImageAdaptive {
 	     * @return 默认命名的ImageIcon
 	     */
 	    public static ImageIcon createAutoAdjustIcon(String url) {
-	    	String imageName = deafultImageUrlAndName;
-    		return createAutoAdjustIcon(url,true,imageName);
+	    	if(url!=null) {
+	    		String imageName = deafultImageUrlAndName;
+	    		return createAutoAdjustIcon(url,true,imageName);
+	    	}
+	    	else {
+	    		return createAutoAdjustIcon(localImageUrl,true,"picture"+num+".jpg");
+	    	}
 	    }
 
 }

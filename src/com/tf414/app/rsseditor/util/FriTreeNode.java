@@ -2,6 +2,7 @@ package com.tf414.app.rsseditor.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -15,30 +16,36 @@ public class FriTreeNode  implements TreeNode{
 
 //	private String ID;//该节点的ID号
 	
-	private ImageIcon img;//节点存放图片
+	private ImageIcon img=null;//节点存放图片
 	
-	private String title;//第一行文字（显示名字）
+	private String title=null;//第一行文字（显示名字）
 	
-	private String text;//第二行文字（显示签名）
+	private Date date=null;
 	
 	private int channelID=0;
 
 	private ArrayList<TreeNode> children=null;//孩子节点
+	
 	private TreeNode parent;//父亲节点
+	
 	static public final Enumeration<TreeNode> EMPTY_ENUMERATION
     = Collections.emptyEnumeration();
 	
-//	public FriTreeNode(String title) {	
-//		this.title=title;		
-//	}
-	public FriTreeNode(String title,int channelID) {	
-		this.title=title;
+	public FriTreeNode(String name,int channelID) {	
+		this.title=name;
 		this.channelID=channelID;
 	}
-	public FriTreeNode(String name,String text,ImageIcon img) {	
-		this.title=title;
-		this.text=text;
+	
+	public FriTreeNode(String name,int channelID,ImageIcon img,Date date) {	
+		this.title=name;
 		this.img=img;
+		this.channelID=channelID;
+		this.date = date==null?new Date():date;
+	}
+	public FriTreeNode(String name,int channelID,ImageIcon img) {	
+		this.title=name;
+		this.img=img;
+		this.channelID=channelID;
 	}
 	
 	/**
@@ -54,6 +61,7 @@ public class FriTreeNode  implements TreeNode{
 		this.title = title;
 	}
 
+	
 	/**
 	 * @param parent the parent to set
 	 */
@@ -74,26 +82,23 @@ public class FriTreeNode  implements TreeNode{
 	public void setImg(ImageIcon img) {
 		this.img = img;
 	}
-	
-	/**
-	 * @return the text
-	 */
-	public String getText() {
-		return text;
-	}
-
-	/**
-	 * @param text the text to set
-	 */
-	public void setText(String text) {
-		this.text = text;
-	}
 
 	public int getChannelID() {
 		return this.channelID;
 	}
 	public void setChannelID(int id) {
 		this.channelID=id;
+	}
+	public Date getDate() {
+		if(date==null) {
+			return null;
+		}else{
+			return date;
+		}
+		
+	}
+	public void setDate(Date date) {
+		this.date=date;
 	}
 	
 	public void addchild(FriTreeNode aChild){

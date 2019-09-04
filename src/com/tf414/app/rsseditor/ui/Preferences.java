@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -14,17 +16,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import com.tf414.app.rsseditor.util.AutoadaptWindowSize;
 import com.tf414.app.rsseditor.util.ImageAdaptive;
+import com.tf414.app.rsseditor.util.NoneFrame;
 
 public class Preferences {
-	private JFrame topWindow = null;
+	private NoneFrame topWindow = null;
 	private JPanel imageFrame = null;
 	private JPanel launch = null;
 	private JPanel view = null;
@@ -32,15 +37,26 @@ public class Preferences {
 	private int[] lengthConfig=AutoadaptWindowSize.getPreferencesGeometry();
 
 	public void init() {
-		topWindow = new JFrame("Preferences");
-		topWindow.setBounds(lengthConfig[0], lengthConfig[1], lengthConfig[2],lengthConfig[3]);
+		topWindow = new NoneFrame(lengthConfig[2],lengthConfig[3]-35);
+//		topWindow = new JFrame();
+//		topWindow.setBounds(0, 0, lengthConfig[2], lengthConfig[3]);
 		topWindow.setLayout(null);
+		
+		JSeparator line1=new JSeparator(SwingConstants.CENTER);
+		line1.setBounds(0, 20, 500, 2);
+		JSeparator line2=new JSeparator(SwingConstants.CENTER);
+		line2.setBounds(0, 20, 500, 2);
+		JSeparator line3=new JSeparator(SwingConstants.CENTER);
+		line3.setBounds(0, 20, 500, 2);
+		
 		initImageFrame();
 		initLaunch();
 		initView();
 		initControl();
 		
-		
+		launch.add(line1);
+		view.add(line2);
+		control.add(line3);
 		
 		topWindow.add(imageFrame);
 		topWindow.add(launch);
@@ -51,9 +67,12 @@ public class Preferences {
 	
 	public void initImageFrame() {
 		imageFrame = new JPanel();
-		imageFrame.setBounds(0, 0, lengthConfig[2], (int)(lengthConfig[2]/10));
-		ImageIcon icon =new ImageIcon("./icon/setting.PNG");
-		JLabel settingIcon = new JLabel(icon);
+		imageFrame.setBounds(0, 0, lengthConfig[2], (int)(6*lengthConfig[2]/50));
+		JLabel settingIcon = new JLabel();
+		settingIcon.setPreferredSize(new Dimension((int)(56*lengthConfig[2]/100),(int)(lengthConfig[2]/10)));
+		settingIcon.setBackground(Color.GREEN);
+		//ImageIcon icon =ImageAdaptive.createAutoAdjustIcon("./icon/setting.PNG",false);
+//		settingIcon.setIcon(icon);
 		imageFrame.add(settingIcon);
 		imageFrame.setBackground(Color.white);
 		
