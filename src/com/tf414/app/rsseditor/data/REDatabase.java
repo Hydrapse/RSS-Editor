@@ -213,6 +213,14 @@ public class REDatabase {
 			System.out.println(sql);
 			executeInsertSQL(sql);
 	}
+	
+	public RSSItem selectItem(String title, int channelID) throws SQLException {
+		String sql="SELECT * FROM items WHERE title='" + title + "' AND channelID=" + channelID;
+		System.out.println(sql);
+		ResultSet rs = executeSelectSQL(sql);
+		rs.first();
+		return resultSetToRSSItem(rs);
+	}
 
 	public void insertChannel(RSSChannel channel) throws SQLException {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
