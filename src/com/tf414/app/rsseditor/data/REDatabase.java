@@ -340,12 +340,6 @@ public class REDatabase {
 		return resultSetToList(result);
 	}
 	
-	public List selectItem(int channelID,String title) throws SQLException {
-		String sql="SELECT * FROM items WHERE channelID="+channelID+",title='"+title+"'";
-		ResultSet result = executeSelectSQL(sql);
-		return resultSetToList(result);
-	}
-	
 	public void createChannelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS channels\n"
 				+ "(\n"
