@@ -113,9 +113,6 @@ public class REDatabase {
 	public RSSChannel selectChannelByChannelID(int channelID) throws SQLException {
 		String sql = "SELECT * FROM channels WHERE channelID = " + channelID + ";";
 		ResultSet rs = executeSelectSQL(sql);
-		if(rs.getFetchSize() == 0) {
-			throw new IllegalArgumentException("No channel use id " + channelID);
-		}
 		rs.first();
 		 RSSChannel channel = new RSSChannel(rs.getString("name"), rs.getString("link"), rs.getString("logoPath"), rs.getString("description"), rs.getString("generator"), rs.getString("webMaster"),
 				rs.getString("language"), rs.getDate("lastBuildDate"));
@@ -130,10 +127,14 @@ public class REDatabase {
 		List<RSSItem> allItems = new ArrayList<RSSItem>();
 		String sql = "SELECT * FROM items;";
 		ResultSet rs = executeSelectSQL(sql);
-		rs.first();
-		for(int i = 0; i < rs.getFetchSize(); ++i) {
+		if(rs.first()) {
+			return new ArrayList<RSSItem>();
+		}
+		while(true) {
 			allItems.add(resultSetToRSSItem(rs));
-			rs.next();
+			if(!rs.next()) {
+				break;
+			}
 		}
 		return allItems;
 	}
@@ -142,9 +143,14 @@ public class REDatabase {
 		List<RSSChannel> allChannels = new ArrayList<RSSChannel>();
 		String sql = "SELECT * FROM channels;";
 		ResultSet rs = executeSelectSQL(sql);
-		for(int i = 0; i < rs.getFetchSize(); ++i) {
+		if(!rs.first()) {
+			return new ArrayList<RSSChannel>();
+		}
+		while(true) {
 			allChannels.add(resultSetToRSSChannel(rs));
-			rs.next();
+			if(!rs.next()) {
+				break;
+			}
 		}
 		return allChannels;
 	}
@@ -153,16 +159,34 @@ public class REDatabase {
 		Map<String, RSSLabel> maps = new HashMap<String, RSSLabel>();
 		String sql = "SELECT * FROM labels;";
 		ResultSet rs = executeSelectSQL(sql);
-		for(int i = 0; i < rs.getFetchSize(); ++i) {
-			String name = rs.getString("name");
-			if(maps.containsKey(name)) {
-				maps.get(name).addChannel(selectChannelByChannelID(rs.getInt("channelID")));
-			}else {
-				maps.put(name, new RSSLabel(name));
-			}
-			rs.next();
+		if(!rs.first()) {
+			System.out.println(12);
+			return new ArrayList<RSSLabel>();
 		}
-		return new ArrayList<RSSLabel>(maps.values());
+		while(true) {
+			String name = rs.getString("label");
+			if(maps.containsKey(name)) {
+				RSSLabel l = maps.get(name);
+				RSSChannel channel = selectChannelByChannelID(rs.getInt("channelID"));
+				System.out.println(channel.getName());
+				l.addChannel(channel);
+				maps.put(name, l);
+			}else {
+				RSSLabel l = new RSSLabel(name);
+				RSSChannel channel = selectChannelByChannelID(rs.getInt("channelID"));
+				System.out.println(channel.getName());
+				l.addChannel(channel);
+				maps.put(name, l);
+			}
+			if(!rs.next()) {
+				break;
+			}
+		}
+		List<RSSLabel> result = new ArrayList<RSSLabel>();
+		for(String s: maps.keySet()) {
+			result.add(maps.get(s));
+		}
+		return result;
 	}
 	
 	public List<RSSItem> selectItemFromChannel(RSSChannel channel) throws SQLException {
