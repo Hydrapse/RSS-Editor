@@ -49,7 +49,7 @@ public class RSSController {
 		return null;
 	}
 	
-	public RSSChannel addRSSChannel(String label, String url) {
+	public RSSChannel addRSSChannel(RSSLabel label, String url) {
 		try {
 			RSSChannel c = DOMReader.read(url);
 			REDatabase.getInstance().insertChannel(c);
@@ -57,7 +57,7 @@ public class RSSController {
 				REDatabase.getInstance().insertItem(item);
 			}
 			REDatabase.getInstance().insertChannel(c);
-			REDatabase.getInstance().insertLabel(label, c);
+			REDatabase.getInstance().insertLabel(label.getId(), label.getName(), c);
 			return c;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -233,9 +233,10 @@ public class REDatabase {
 		executeInsertSQL(sql);
 	}
 
-	public void insertLabel(String label, RSSChannel channel) throws SQLException {
+	public void insertLabel(int id, String label, RSSChannel channel) throws SQLException {
 		int channelID = getChannelIDByName(channel.getName());
 		String sql="INSERT INTO labels VALUES ("
+				+ id + ","
 				+ "'" + label + "',"
 				+ channelID
 				+")";
