@@ -83,10 +83,7 @@ public class REDatabase {
 		int channelID = rs.getInt("channelID");
 		String sql = "SELECT * FROM channels WHERE channelID = " + channelID + ";";
 		ResultSet rs1 = executeSelectSQL(sql);
-		if(rs.getFetchSize() == 0) {
-			throw new IllegalArgumentException("No channel use id " + channelID);
-		}
-		rs.first();
+		rs1.first();
 		RSSChannel channel = new RSSChannel(rs1.getString("name"), rs1.getString("link"), rs1.getString("logoPath"), rs1.getString("description"), rs1.getString("generator"), rs1.getString("webMaster"),
 				rs1.getString("language"), rs1.getDate("lastBuildDate"));
 		return new RSSItem(channel, rs.getString("title"), rs.getString("description"), rs.getDate("dateCreated"), rs.getString("author"), rs.getString("link"));
@@ -160,7 +157,6 @@ public class REDatabase {
 		String sql = "SELECT * FROM labels;";
 		ResultSet rs = executeSelectSQL(sql);
 		if(!rs.first()) {
-			System.out.println(12);
 			return new ArrayList<RSSLabel>();
 		}
 		while(true) {
@@ -173,6 +169,7 @@ public class REDatabase {
 				maps.put(name, l);
 			}else {
 				RSSLabel l = new RSSLabel(name);
+				l.setId(rs.getInt("labelID"));
 				RSSChannel channel = selectChannelByChannelID(rs.getInt("channelID"));
 				System.out.println(channel.getName());
 				l.addChannel(channel);
