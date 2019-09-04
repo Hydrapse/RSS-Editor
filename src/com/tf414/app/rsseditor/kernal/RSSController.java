@@ -96,5 +96,14 @@ public class RSSController {
 		}
 		return null;
 	}
+	
+	public RSSChannel setLike(String name, boolean isLike) {
+		try {
+			return REDatabase.getInstance().updateLike(name, isLike);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
 

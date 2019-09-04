@@ -166,16 +166,14 @@ public class ReadingWindow extends JFrame{
 				//like
 				ImageIcon likeIcon2;
 				if(infoItem.getChannel().isLike()) {
-					//db
-					//end db
 					infoItem.getChannel().setLike(false);
+					RSSController.getInstance().setLike(infoItem.getChannel().getName(), infoItem.getChannel().isLike());
 					likeIcon2 = ImageAdaptive.createAutoAdjustIcon("./icon/4-04.png", false);
 					buttonLike.setIcon(likeIcon2);
 				}
 				else {
-					//db
-					//end db
 					infoItem.getChannel().setLike(true);
+					RSSController.getInstance().setLike(infoItem.getChannel().getName(), infoItem.getChannel().isLike());
 					likeIcon2 = ImageAdaptive.createAutoAdjustIcon("./icon/5-05.png", false);
 					buttonLike.setIcon(likeIcon2);
 					
