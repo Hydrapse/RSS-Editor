@@ -59,25 +59,25 @@ public class ReadingWindow extends JFrame{
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RSSChannel testChannel = new RSSChannel("OK");
-					testChannel.setLastBuildDate(TimeConv.strToDate(new String("Tue, 03 Sep 2019 16:10:45 GMT")));
-					RSSItem testItem = new RSSItem(testChannel, "isOkkkkkkkkkkkkkkkkkkkk");
-					testItem.setDateCreated(TimeConv.strToDate(new String("Tue, 03 Sep 2019 16:10:45 GMT")));
-					testItem.setDescription("hello");
-					testItem.setChannel(testChannel);
-					ReadingWindow window = new ReadingWindow(testItem);
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					RSSChannel testChannel = new RSSChannel("OK");
+//					testChannel.setLastBuildDate(TimeConv.strToDate(new String("Tue, 03 Sep 2019 16:10:45 GMT")));
+//					RSSItem testItem = new RSSItem(testChannel, "isOkkkkkkkkkkkkkkkkkkkk");
+//					testItem.setDateCreated(TimeConv.strToDate(new String("Tue, 03 Sep 2019 16:10:45 GMT")));
+//					testItem.setDescription("hello");
+//					testItem.setChannel(testChannel);
+//					ReadingWindow window = new ReadingWindow(testItem);
+//					window.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//
+//	}
 
 	/**
 	 * Create the application.
@@ -87,20 +87,20 @@ public class ReadingWindow extends JFrame{
 		String channelName =null;
 		RSSChannel pchannel =null;
 		List<RSSItem> itemList =null;
-//		try {
-//			channelName = infoItem.getChannel().getName();
-//			pchannel = RSSController.getRSSChannel(channelName);
-//			itemList = pchannel.getItems();
-//		}
-//		catch (Exception e){
-//			System.out.print("error on take itemList from Db");
-//		}
-//		
-//		for(int i = 0 ; i < itemList.size()-1 ; ++i) {
-//			if(itemList.get(i).getTitle().equals(infoItem.getTitle())) {
-//				thisItem = i;
-//			}
-//		}
+		try {
+			channelName = infoItem.getChannel().getName();
+			pchannel = RSSController.getInstance().getRSSChannel(channelName);
+			itemList = pchannel.getItems();
+		}
+		catch (Exception e){
+			System.out.print("error on take itemList from Db");
+		}
+		
+		for(int i = 0 ; i < itemList.size()-1 ; ++i) {
+			if(itemList.get(i).getTitle().equals(infoItem.getTitle())) {
+				thisItem = i;
+			}
+		}
 		
 		showTheInfo(infoItem,itemList);
 		initialize();
