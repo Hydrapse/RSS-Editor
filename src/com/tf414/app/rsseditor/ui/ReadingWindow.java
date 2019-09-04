@@ -87,20 +87,20 @@ public class ReadingWindow extends JFrame{
 		String channelName =null;
 		RSSChannel pchannel =null;
 		List<RSSItem> itemList =null;
-//		try {
-//			channelName = infoItem.getChannel().getName();
-//			pchannel = RSSController.getInstance().getRSSChannel(channelName);
-//			itemList = pchannel.getItems();
-//		}
-//		catch (Exception e){
-//			System.out.print("error on take itemList from Db");
-//		}
-//		
-//		for(int i = 0 ; i < itemList.size()-1 ; ++i) {
-//			if(itemList.get(i).getTitle().equals(infoItem.getTitle())) {
-//				thisItem = i;
-//			}
-//		}
+		try {
+			channelName = infoItem.getChannel().getName();
+			pchannel = RSSController.getInstance().getRSSChannel(channelName);
+			itemList = pchannel.getItems();
+		}
+		catch (Exception e){
+			System.out.print("error on take itemList from Db");
+		}
+		
+		for(int i = 0 ; i < itemList.size()-1 ; ++i) {
+			if(itemList.get(i).getTitle().equals(infoItem.getTitle())) {
+				thisItem = i;
+			}
+		}
 		
 		showTheInfo(infoItem,itemList);
 		initialize();
