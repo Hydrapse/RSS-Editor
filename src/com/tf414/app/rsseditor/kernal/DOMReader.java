@@ -57,6 +57,7 @@ public final class DOMReader {
         		link = n.getTextContent();
         	}
 		}
+		
 		RSSItem item = new RSSItem(channel,title,description,dateCreated,author,link);
 		return item;
 	}
@@ -117,6 +118,12 @@ public final class DOMReader {
 			}
 		}
 		return null;
+	}
+	
+	public String deSigle(String str) {
+		String fin;
+		fin = str.replaceAll("'", "\'\'");
+		return fin;
 	}
 	
 	public static RSSChannel read(String url) throws ParserConfigurationException, IOException, SAXException{ 
