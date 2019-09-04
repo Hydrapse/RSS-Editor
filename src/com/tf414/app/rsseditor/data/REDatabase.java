@@ -276,21 +276,14 @@ public class REDatabase {
 		executeRemoveSQL(sql);
 	}
 
-	public boolean removeChannel(String channel) throws SQLException {
-		String selectChannelID = "SELECT channelID FROM channels WHERE name='"+channel+"'";
-		ResultSet rs = executeSelectSQL(selectChannelID);
-		if(rs.getRow() == 0) {
-			return false;
-		}
-		int channelID = rs.getInt(0);
+	public  void removeChannel(String channel) throws SQLException {
+		int channelID = getChannelIDByName(channel);
 		String delItem = "DELETE FROM items WHERE channelID="+channelID;
 		String delLab = "DELETE FROM labels WHERE channelID="+channelID;
 		String delCha = "DELETE FROM channels WHERE channelID="+channelID;
 		executeRemoveSQL(delItem);
 		executeRemoveSQL(delLab);
 		executeRemoveSQL(delCha);
-		return true;
-		
 	}
 
 	public void removeLabel(String label) throws SQLException {
