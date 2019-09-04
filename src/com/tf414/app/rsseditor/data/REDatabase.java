@@ -259,20 +259,6 @@ public class REDatabase {
 			
 	}
 
-	public void updateChannel(RSSChannel channel) throws SQLException {
-			String sql="UPDATE channels SET "
-					+ "description = '"+channel.getDescription()+"',"
-					+ "link = '" +channel.getLink()+"',"
-					+ "generator = '"+channel.getGenerator()+"',"
-					+ "webMaster = '"+channel.getWebMaster()+"',"
-					+ "logoPath = '"+channel.getLogoPath()+"',"
-					+ "language = '"+channel.getLanguage()+"',"
-					+ "lastBuildDate = "+channel.getLastBuildDate()+","
-					+ "isLike = "+channel.isLike()+","
-					+" WHERE name ='"+channel.getName()+"'";
-			executeUpdateSQL(sql);
-	}
-
 	public void updateLabel(RSSLabel label) throws SQLException {
 		List<RSSChannel> list=label.getChannelList();
 		for(int i=0 ; i<list.size() ; ++i) {
@@ -381,6 +367,7 @@ public class REDatabase {
 	public void createLabelTable() throws SQLException {
 		String sql = "CREATE TABLE IF NOT EXISTS labels\n"
 				+ "(\n"
+				+ "labelID integer NOT NULL PRIMARY KEY AUTO_INCREMENT,"
 				+ "label varchar(50) NOT NULL,\n"
 				+ "channelID integer NOT NULL,\n"
 				+ "FOREIGN KEY (channelID) REFERENCES channels(channelID)\n"
@@ -421,6 +408,14 @@ public class REDatabase {
 			System.out.println("Occurred an error when close the database connection!");
 			e.printStackTrace();
 		}
+	}
+
+	public RSSChannel updateLike(String name, boolean isLike) throws SQLException {
+		String sql="UPDATE channels SET "
+				+ "isLike = "+(isLike?1:0)+","
+				+" WHERE name ='"+name+"'";
+		executeUpdateSQL(sql);
+		return selectChannelByChannelID(getChannelIDByName(name));
 	}
 
 }
