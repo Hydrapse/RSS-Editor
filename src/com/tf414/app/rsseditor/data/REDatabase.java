@@ -86,7 +86,7 @@ public class REDatabase {
 		rs1.first();
 		RSSChannel channel = new RSSChannel(rs1.getString("name"), rs1.getString("link"), rs1.getString("logoPath"), rs1.getString("description"), rs1.getString("generator"), rs1.getString("webMaster"),
 				rs1.getString("language"), rs1.getDate("lastBuildDate"));
-		return new RSSItem(channel, rs.getString("title"), rs.getString("description"), rs.getDate("dateCreated"), rs.getString("author"), rs.getString("link"));
+		return new RSSItem(channel, rs.getString("title"), rs.getString("description"), rs.getDate("pubDate"), rs.getString("author"), rs.getString("link"));
 	}
 	
 	private RSSChannel resultSetToRSSChannel(ResultSet rs) throws SQLException {
